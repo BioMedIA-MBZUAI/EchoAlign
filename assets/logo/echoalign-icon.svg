@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="14 2 68 62" role="img" aria-label="EchoAlign">
+<title>EchoAlign</title>
+<defs><clipPath id="f"><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z"/></clipPath></defs><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z" fill="#16202e"/>
+<g clip-path="url(#f)" stroke-width="1.6" stroke-linejoin="round">
+<path d="M45 14 C41 18 34.5 26 35 34.5 C35.4 37.6 41.5 38.6 45.6 37.2 C46.6 29.5 46.6 21 45 14Z" fill="#2c5f9e" fill-opacity=".55" stroke="#5f8fd0"/>
+<path d="M51 12 C56.5 16 63.5 25.5 62.5 34.5 C62 38 54.5 39 50.4 37.2 C49.4 29 49.4 20 51 12Z" fill="#d2463a" fill-opacity=".6" stroke="#ec6b5d"/>
+<path d="M45.4 41 C45.6 46.5 44 50.5 39 50.6 C33.5 50.7 31 47 32 43.5 C33 40.8 41 40 45.4 41Z" fill="#6e9bd1" fill-opacity=".55" stroke="#92b8e6"/>
+<path d="M50.6 41 C50.4 46.5 52 50.5 57 50.6 C62.5 50.7 65 47 64 43.5 C63 40.8 55 40 50.6 41Z" fill="#e0735a" fill-opacity=".6" stroke="#f0937c"/>
+</g>
+</svg>

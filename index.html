@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EchoAlign</title>
+<meta name="description" content="EchoAlign: echocardiography foundation model with multilevel report alignment. Interactive method, results and demo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=r17">
+<script>/* hide the title block from the first paint when the intro will play (avoids a flash before app.js runs) */
+(function () { try { if (!matchMedia("(prefers-reduced-motion: reduce)").matches && (!location.hash || location.hash === "#overview")) {
+  document.documentElement.classList.add("intro-pending");
+  setTimeout(function () { document.documentElement.classList.remove("intro-pending"); }, 5000);   // failsafe if scripts never load
+} } catch (e) {} })();
+</script>
+<link rel="icon" type="image/svg+xml" href="assets/logo/echoalign-icon.svg">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<nav class="topnav" id="topnav">
+  <a class="brand" href="#overview" aria-label="EchoAlign home"><svg class="mark" viewBox="-14 0 124 64" aria-hidden="true"><defs><clipPath id="lgA"><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z"/></clipPath></defs><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z" fill="var(--fan)"/><g clip-path="url(#lgA)" stroke-width="1.6" stroke-linejoin="round"><path d="M45 14 C41 18 34.5 26 35 34.5 C35.4 37.6 41.5 38.6 45.6 37.2 C46.6 29.5 46.6 21 45 14Z" fill="#2c5f9e" fill-opacity=".55" stroke="#5f8fd0"/><path d="M51 12 C56.5 16 63.5 25.5 62.5 34.5 C62 38 54.5 39 50.4 37.2 C49.4 29 49.4 20 51 12Z" fill="#d2463a" fill-opacity=".6" stroke="#ec6b5d"/><path d="M45.4 41 C45.6 46.5 44 50.5 39 50.6 C33.5 50.7 31 47 32 43.5 C33 40.8 41 40 45.4 41Z" fill="#6e9bd1" fill-opacity=".55" stroke="#92b8e6"/><path d="M50.6 41 C50.4 46.5 52 50.5 57 50.6 C62.5 50.7 65 47 64 43.5 C63 40.8 55 40 50.6 41Z" fill="#e0735a" fill-opacity=".6" stroke="#f0937c"/></g><g fill="none" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0.1 3.2"><path d="M36 25 C28 25 22 20 13 20" stroke="#5f8fd0"/><path d="M33 46 C26 46 22 50 13 50" stroke="#92b8e6"/><path d="M61 25 C69 25 74 20 83 20" stroke="#ec6b5d"/><path d="M63 46 C70 46 74 50 83 50" stroke="#f0937c"/></g><rect x="-12" y="17.5" width="22" height="5" rx="2.5" fill="#2c5f9e"/><rect x="-8" y="47.5" width="18" height="5" rx="2.5" fill="#6e9bd1"/><rect x="86" y="17.5" width="22" height="5" rx="2.5" fill="#d2463a"/><rect x="86" y="47.5" width="18" height="5" rx="2.5" fill="#e0735a"/></svg><span>Echo<i class="al">Align</i></span></a>
+  <div class="navlinks" id="navlinks">
+    <a href="#demo"><span>01</span>Demo</a>
+    <a href="#problem"><span>02</span>Problem</a>
+    <a href="#method"><span>03</span>Method</a>
+    <a href="#results"><span>04</span>Results</a>
+    <a href="#team"><span>05</span>Team</a>
+  </div>
+  <div class="navlogos" aria-label="Affiliations"><a href="https://mbzuai.ac.ae" target="_blank" rel="noopener" title="MBZUAI"><img src="assets/partners/mbzuai.svg" alt="MBZUAI" class="nl-mbz"></a><a href="https://mbzuai-biomedia.com/" target="_blank" rel="noopener" title="BioMedIA lab"><img src="assets/partners/biomedia.png?v=2" alt="BioMedIA lab" class="nl-bm"></a><a href="https://icardio.ai" target="_blank" rel="noopener" title="iCardio.ai"><img src="assets/partners/icardio.png" alt="iCardio.ai" class="nl-ic"></a></div>
+  <button class="iconbtn" id="themebtn" aria-label="Toggle dark mode" title="Toggle theme">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
+</nav>
+<div class="dots" id="dots"></div>
+
+<!-- ======================= OVERVIEW ======================= -->
+<section class="slide" id="overview" data-name="Overview">
+  <div class="slide-in hero-grid">
+    <div class="hero-text">
+      <div class="hero-mark"><svg class="mark" viewBox="-14 0 124 64" aria-hidden="true"><defs><clipPath id="lgB"><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z"/></clipPath></defs><path d="M48 4 L15.6 52 A58 58 0 0 0 80.4 52 Z" fill="var(--fan)"/><g clip-path="url(#lgB)" stroke-width="1.6" stroke-linejoin="round"><path d="M45 14 C41 18 34.5 26 35 34.5 C35.4 37.6 41.5 38.6 45.6 37.2 C46.6 29.5 46.6 21 45 14Z" fill="#2c5f9e" fill-opacity=".55" stroke="#5f8fd0"/><path d="M51 12 C56.5 16 63.5 25.5 62.5 34.5 C62 38 54.5 39 50.4 37.2 C49.4 29 49.4 20 51 12Z" fill="#d2463a" fill-opacity=".6" stroke="#ec6b5d"/><path d="M45.4 41 C45.6 46.5 44 50.5 39 50.6 C33.5 50.7 31 47 32 43.5 C33 40.8 41 40 45.4 41Z" fill="#6e9bd1" fill-opacity=".55" stroke="#92b8e6"/><path d="M50.6 41 C50.4 46.5 52 50.5 57 50.6 C62.5 50.7 65 47 64 43.5 C63 40.8 55 40 50.6 41Z" fill="#e0735a" fill-opacity=".6" stroke="#f0937c"/></g><g fill="none" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="0.1 3.2"><path d="M36 25 C28 25 22 20 13 20" stroke="#5f8fd0"/><path d="M33 46 C26 46 22 50 13 50" stroke="#92b8e6"/><path d="M61 25 C69 25 74 20 83 20" stroke="#ec6b5d"/><path d="M63 46 C70 46 74 50 83 50" stroke="#f0937c"/></g><rect x="-12" y="17.5" width="22" height="5" rx="2.5" fill="#2c5f9e"/><rect x="-8" y="47.5" width="18" height="5" rx="2.5" fill="#6e9bd1"/><rect x="86" y="17.5" width="22" height="5" rx="2.5" fill="#d2463a"/><rect x="86" y="47.5" width="18" height="5" rx="2.5" fill="#e0735a"/></svg></div>
+      <h1>Echo<span class="accent">Align</span></h1>
+      <p class="sub">A vision-language foundation model that aligns each cardiac structure, video and study with its report text, and restricts supervision to the views that actually depict each structure.</p>
+      <div class="authors"><b>Ahmed Aly</b>, Darya Taratynova, Lotfi Abdelkrim Mecharbat, Roman A. Sandler, Joseph Z. Sokol, Joshua Penn, Klaus H. Maier-Hein, Numan Saeed<sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup>, Mohammad Yaqub<sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup></div>
+      <div class="affil">MBZUAI · iCardio.ai · DKFZ &nbsp;·&nbsp; <sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup>joint supervision</div>
+      <div class="btnrow">
+        <a class="btn primary" href="#demo"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Demo</a>
+        <a class="btn" href="https://github.com/BioMedIA-MBZUAI/EchoAlign" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>Code</a>
+        <a class="btn" href="https://huggingface.co/EchoAlign" target="_blank" rel="noopener">Weights</a>
+        <a class="btn disabled" href="#demo" aria-disabled="true">Paper (soon)</a>
+        <button class="btn" id="replayIntro" type="button" title="Replay the opening animation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Replay intro</button>
+      </div>
+      <div class="stats" id="herostats">
+        <div class="stat"><div class="n" data-count="2.87" data-dec="2" data-suf="M">0</div><div class="l">videos &amp; images, 159 centers</div></div>
+        <div class="stat"><div class="n" data-count="0.47" data-dec="2" data-suf="M">0</div><div class="l">test videos, 10 external datasets</div></div>
+        <div class="stat hl"><div class="n" data-count="0.890" data-dec="3">0</div><div class="l">mean AUROC · 68 tasks · best of 6</div></div>
+        <div class="stat hl"><div class="n" data-count="0.530" data-dec="3">0</div><div class="l">mean QWK · 31 grading tasks · best of 6</div></div>
+      </div>
+    </div>
+    <div class="card zoomable echo-card" data-title="12 anatomical queries on a CAMUS clip">
+      <div class="cine" id="cineHero"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= DEMO ======================= -->
+<section class="slide" id="demo" data-name="Demo">
+  <div class="slide-in">
+    <header class="shead">
+      <div class="kicker">01 · Try it</div>
+      <h2>Score any finding zero-shot</h2>
+    </header>
+    <div class="grid-demo solo">
+      <div class="card demo-shell zoomable" data-title="EchoAlign demo">
+        <div class="demo-bar"><div class="dots3"><i></i><i></i><i></i></div><div class="url" id="demoUrl">huggingface.co/EchoAlign</div><a class="btn sm" id="demoOpen" target="_blank" rel="noopener">Open ↗</a></div>
+        <div class="demo-body" id="demoBody"></div>
+      </div>
+      <div class="card runlocal">
+          <div class="cardhead"><div class="ct">Run locally</div></div>
+<pre class="code" id="code"><button class="copy" data-copy="code">Copy</button><span class="k">from</span> echoalign.loader <span class="k">import</span> load_echo
+<span class="k">from</span> echoalign.model <span class="k">import</span> EchoAlign
+model = EchoAlign(<span class="s">"weights/EchoAlign.pt"</span>)
+study = model.encode_study([load_echo(<span class="s">"echo.dcm"</span>)])  <span class="c"># 13 × 512</span>
+model.zero_shot(study, [<span class="s">"Severe mitral regurgitation."</span>],
+                [<span class="s">"No mitral regurgitation."</span>], structure=<span class="s">"mitral_valve"</span>)</pre>
+        </div>
+    </div>
+  </div>
+  <a class="next" href="#problem">The problem ↓</a>
+</section>
+
+<!-- ======================= PROBLEM ======================= -->
+<section class="slide" id="problem" data-name="Problem">
+  <div class="slide-in">
+    <header class="shead">
+      <div class="kicker">02 · The problem</div>
+      <h2>Each video shows only part of the heart. Its report describes all of it.</h2>
+      <p class="lede">“Existing models are trained by pairing each video with the full clinical report, including structures and findings its view does not show. This mismatch lets a model associate a finding with incidental or spurious signals rather than its visual evidence.”</p>
+    </header>
+    <div class="chips" id="viewchips"></div>
+    <div class="grid3 problem-grid">
+      <div class="card zoomable" data-title="Imaging plane on a 3D heart">
+        <div class="cardhead"><div class="ct">Imaging plane</div><div class="cs">drag to rotate · scroll to zoom</div></div>
+        <div class="heart3d" id="heartProblem"></div>
+        <div class="row-ctl"><label class="tog"><input type="checkbox" id="cutToggle"> Cut along the plane</label></div>
+      </div>
+      <div class="card zoomable" data-title="What the plane cuts through">
+        <div class="cardhead"><div class="ct" id="sliceTitle">Slice</div><div class="cs">colored by the paper's visibility weight</div></div>
+        <div class="slice" id="sliceProblem"></div>
+      </div>
+      <div class="card zoomable" data-title="Report supervision for this view">
+        <div class="cardhead"><div class="ct">Report supervision</div>
+          <div class="seg" id="pairmode"><button data-v="full" class="on">Whole report</button><button data-v="ea">EchoAlign</button></div></div>
+        <div class="report" id="report"></div>
+        <div id="pmeter"></div>
+      </div>
+    </div>
+    <p class="foot">3D anatomy: Human Reference Atlas heart and great vessels (HuBMAP, CC BY 4.0); the pericardium is an approximate envelope. View planes are computed from the model's apex and valve centres. Report text is a synthetic example written for this page.</p>
+  </div>
+  <a class="next" href="#method">The method ↓</a>
+</section>
+
+<!-- ======================= METHOD ======================= -->
+<section class="slide" id="method" data-name="Method">
+  <div class="slide-in">
+    <header class="shead row">
+      <div>
+        <div class="kicker">03 · Method</div>
+        <h2>Multilevel report alignment</h2>
+      </div>
+      <div class="player">
+        <button class="btn sm" id="mPrev" aria-label="Previous step">←</button>
+        <button class="btn sm primary" id="mPlay">▶ Play</button>
+        <button class="btn sm" id="mNext" aria-label="Next step">→</button>
+      </div>
+    </header>
+    <div class="card zoomable overview-card" data-title="EchoAlign architecture and the four contrastive losses (Fig. 1c)">
+      <div class="cardhead"><div class="ct">Overview</div><div class="cs">Click a part of the figure to see it in detail below</div></div>
+      <div id="mOverview" class="chart"></div>
+    </div>
+    <div class="steps" id="mSteps"></div>
+    <div class="method-grid">
+      <div class="card zoomable stagecard" data-title="Method detail">
+        <div class="stage" id="mStage"></div>
+      </div>
+      <aside class="card side">
+        <div class="stepnum" id="mNum"></div>
+        <div class="steptitle" id="mTitle"></div>
+        <p class="steptext" id="mText"></p>
+        <div id="mSideExtra"></div>
+      </aside>
+    </div>
+  </div>
+  <a class="next" href="#results">The results ↓</a>
+</section>
+
+<!-- ======================= RESULTS ======================= -->
+<section class="slide" id="results" data-name="Results">
+  <div class="slide-in">
+    <header class="shead row">
+      <div>
+        <div class="kicker">04 · Results</div>
+        <h2>One model that detects, grades, measures and segments</h2>
+      </div>
+      <div class="kpis">
+        <div><b>0.890</b><span>mean AUROC<br>linear probe</span></div>
+        <div><b>0.530</b><span>mean QWK<br>severity</span></div>
+        <div><b>0.796</b><span>mean AUROC<br>zero-shot</span></div>
+      </div>
+    </header>
+    <div class="tabs" id="rtabs">
+      <button data-t="cls" class="on">Classification</button>
+      <button data-t="zs">Zero-shot</button>
+      <button data-t="sev">Severity</button>
+      <button data-t="seg">Measure &amp; segment</button>
+      <button data-t="eff">Efficiency &amp; robustness</button>
+      <button data-t="gr">Anatomical grounding</button>
+    </div>
+
+    <!-- classification -->
+    <div class="tabpane on" data-t="cls">
+      <p class="tabline">Across the 68 tasks, EchoAlign's mean AUROC is <b>0.890</b>, the highest of the six models (P &lt; 0.01 against each). It ranks first on 32 of the 68 tasks and on all eight regurgitation detection tasks.</p>
+      <div class="grid-cls">
+        <div class="card zoomable" data-title="Mean performance across all tasks">
+          <div class="cardhead"><div class="ct">Mean across tasks</div><div class="cs">EchoAlign with 95% CI</div></div>
+          <div class="legend tiny" id="lbLegend"></div>
+          <div class="lbstack">
+            <div><div class="mini-t">Linear probe · AUROC · 68</div><div id="lb1" class="chart"></div></div>
+            <div><div class="mini-t">Severity · QWK · 31</div><div id="lb2" class="chart"></div></div>
+            <div><div class="mini-t">Zero-shot · AUROC · 68</div><div id="lb3" class="chart"></div></div>
+          </div>
+        </div>
+        <div class="card zoomable" data-title="Task explorer · every task, every model">
+          <div class="cardhead"><div class="ct">Task explorer</div><div class="cs" id="exSub"></div></div>
+          <div class="controls">
+            <div class="seg" id="exMode"><button data-v="strip" class="on">All models</button><button data-v="h2h">Head-to-head</button><button data-v="table">Table</button></div>
+            <div class="seg" id="exEval"><button data-v="lp" class="on">Linear probe</button><button data-v="zs">Zero-shot</button></div>
+            <div class="seg" id="exSrc"><button data-v="all" class="on">All</button><button data-v="private">Private</button><button data-v="mimic">MIMIC</button><button data-v="cardiobench">CardioBench</button></div>
+            <label class="ctl" id="exSortWrap">Sort <select id="exSort"><option value="group">by structure</option><option value="ea">by EchoAlign</option><option value="margin">by margin</option></select></label>
+            <label class="ctl" id="exVsWrap" style="display:none">vs <select id="exVs"></select></label>
+          </div>
+          <div class="statrow" id="exStats"></div>
+          <div class="legend tiny" id="exLegend"></div>
+          <div id="explorer" class="chart"></div>
+        </div>
+        <div class="card zoomable" data-title="Detection across cardiac structures">
+          <div class="cardhead"><div class="ct">By cardiac structure</div><div class="cs" id="radialNote">hover a structure</div></div>
+          <div id="radial" class="chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- zero-shot -->
+    <div class="tabpane" data-t="zs">
+      <p class="tabline">Each finding is scored by the similarity of present and absent prompts to the anatomical study embedding of its own cardiac structure. Mean AUROC is <b>0.796</b>, compared with 0.692 for EchoPrime and 0.692 for EchoCLIP; on the 39 tasks with a PanEcho head, 0.830 vs 0.828 for PanEcho's trained heads.</p>
+      <div class="grid-3">
+        <div class="card zoomable" data-title="Zero-shot vs linear probe · mean ROC">
+          <div class="cardhead"><div class="ct">Zero-shot vs linear probe</div><div class="seg" id="rocBand"><button data-v="lp" class="on">Probe band</button><button data-v="zs">Zero-shot band</button></div></div>
+          <div class="cs">Mean ROC over all findings: zero-shot from text alone, compared with linear probes trained on labels</div>
+          <div class="legend tiny"><span class="k"><span class="ln dash" style="border-color:var(--m0)"></span>Zero-shot · AUROC 0.80</span><span class="k ea"><span class="ln" style="border-color:var(--m0)"></span>Linear probe · AUROC 0.89</span></div>
+          <div id="roc" class="chart"></div>
+        </div>
+        <div class="card zoomable" data-title="Zero-shot scores rise with reported severity · MIMIC-IV-Echo">
+          <div class="cardhead"><div class="ct">Scores rise with severity</div><div class="cs">MIMIC-IV-Echo</div></div>
+          <div class="seg" id="ridgeSel"></div>
+          <div id="ridge" class="chart"></div>
+          <div class="legend tiny" id="gradeLegend"></div>
+        </div>
+        <div class="card zoomable" data-title="Prompt inspector">
+          <div class="cardhead"><div class="ct">Prompt inspector</div><div class="seg" id="piSrc"><button data-v="private" class="on">Private</button><button data-v="mimic">MIMIC</button></div></div>
+          <label class="ctl full">Finding <select id="piSel"></select></label>
+          <div id="piStruct"></div>
+          <div class="plist" id="piPos"></div>
+          <div class="plist" id="piNeg"></div>
+          <div id="piBars" class="chart"></div>
+          <div class="note" id="piNote"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- severity -->
+    <div class="tabpane" data-t="sev">
+      <p class="tabline">An ordinal probe grades each finding on its ordered scale. Mean QWK across 31 graded tasks is <b>0.530</b>, the highest of the six models; EchoAlign ranks first on all six regurgitation grading tasks.</p>
+      <div class="grid-2">
+        <div class="card zoomable" data-title="Expected grade by reported grade · private test set">
+          <div class="cardhead"><div class="ct">Expected grade by reported grade</div><div class="seg" id="egSel"></div></div>
+          <div class="split"><div><div id="egRidge" class="chart"></div><div class="legend tiny" id="egLegend"></div></div><div><div id="egRoc" class="chart"></div><div id="egStats" class="note"></div></div></div>
+        </div>
+        <div class="card zoomable" data-title="QWK on every graded finding">
+          <div class="cardhead"><div class="ct">QWK per finding</div><div class="seg" id="qwkSrc"><button data-v="private" class="on">Private (11)</button><button data-v="mimic">MIMIC (20)</button></div></div>
+          <div class="legend tiny" id="qwkLegend"></div>
+          <div id="qwk" class="chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- measurement & segmentation -->
+    <div class="tabpane" data-t="seg">
+      <p class="tabline">EchoAlign reaches a mean Dice of 0.880 on CAMUS, second to 0.892 for EchoFM, and 0.917 for the LV cavity on EchoNet-Dynamic. Across 25 measurement tasks, EchoPrime has the lowest RMSE on 11 tasks and EchoAlign on six.</p>
+      <div class="grid-3">
+        <div class="card zoomable" data-title="Segmentation on CAMUS · expert (dashed) vs EchoAlign (blue)">
+          <div class="cardhead"><div class="ct">CAMUS contours</div><button class="btn sm" id="segReplay">⟳</button></div>
+          <div id="segImgs" class="segimgs"></div>
+        </div>
+        <div class="card zoomable" data-title="Dice similarity coefficient">
+          <div class="cardhead"><div class="ct">Dice</div><div class="seg" id="segMode"><button data-v="same" class="on">Same dataset</button><button data-v="transfer">Trained on CAMUS</button></div></div>
+          <div id="segDice" class="chart"></div>
+        </div>
+        <div class="card zoomable" data-title="Measurement error relative to the best model">
+          <div class="cardhead"><div class="ct">RMSE ÷ best</div><div class="seg" id="rmSrc"><button data-v="private" class="on">Private</button><button data-v="mimic">MIMIC</button><button data-v="cb">CardioBench</button></div></div>
+          <div id="rmse" class="chart"></div>
+        </div>
+      </div>
+      <div class="legend tiny" id="bLegend"></div>
+    </div>
+
+    <!-- efficiency -->
+    <div class="tabpane" data-t="eff">
+      <p class="tabline">On the same pretraining studies, mean AUROC rises from 0.815 to 0.869 for EchoAlign and from 0.725 to 0.803 for the EchoPrime recipe. With 1% of the probe labels, EchoAlign reaches 0.888 across 32 private tasks.</p>
+      <div class="grid-3">
+        <div class="card zoomable" data-title="Pretraining-data scaling">
+          <div class="cardhead"><div class="ct">Same studies, two recipes</div><div class="cs">○ subsets · ● released</div></div>
+          <div id="scaling" class="chart"></div>
+        </div>
+        <div class="card zoomable" data-title="Label efficiency">
+          <div class="cardhead"><div class="ct">Label efficiency</div><div class="seg" id="leSrc"><button data-v="private" class="on">Private</button><button data-v="mimic">MIMIC</button></div></div>
+          <div class="legend tiny" id="leLegend"></div>
+          <div id="labeleff" class="chart"></div>
+        </div>
+        <div class="card zoomable" data-title="Patient subgroups · EchoAlign vs EchoPrime">
+          <div class="cardhead"><div class="ct">Subgroups vs EchoPrime</div><div class="seg" id="sgSrc"><button data-v="private" class="on">Private</button><button data-v="mimic">MIMIC</button></div></div>
+          <div id="subgroups" class="chart scrolly"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- grounding -->
+    <div class="tabpane" data-t="gr">
+      <p class="tabline">A finding is read better from the embedding of its own cardiac structure than from the average of the 12 embeddings, indicating that each embedding encodes the findings of the structure to which it was aligned.</p>
+      <div class="grid-gr">
+        <div class="card zoomable" data-title="Each finding read from each study embedding">
+          <div class="cardhead"><div class="ct">ΔAUROC vs mean of 12 embeddings</div><div class="seg" id="tkSrc"><button data-v="private" class="on">Private</button><button data-v="mimic">MIMIC</button></div></div>
+          <div id="tkLegend"></div>
+          <div class="scroll-x scrolly"><div id="tokmap" class="chart"></div></div>
+        </div>
+        <div class="card zoomable" data-title="Structure embedding on the 3D heart">
+          <div class="cardhead"><div class="ct" id="grHeartTitle">Hover a column</div></div>
+          <div class="heart3d" id="heartGround"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="next" href="#team">Team ↓</a>
+</section>
+
+<!-- ======================= TEAM ======================= -->
+<section class="slide" id="team" data-name="Team">
+  <div class="slide-in">
+    <header class="shead">
+      <div class="kicker">05 · Team</div>
+      <h2>Who built EchoAlign</h2>
+    </header>
+    <div class="team-grid">
+      <div class="card contact">
+        <div class="cardhead"><div class="ct">Contact</div></div>
+        <div class="c-name"><a href="https://ahmedatefahmedaly.github.io/" target="_blank" rel="noopener">Ahmed Aly</a></div>
+        <div class="c-role">First &amp; corresponding author · Research Engineer, <a href="https://mbzuai-biomedia.com/team" target="_blank" rel="noopener">BioMedIA lab</a>, MBZUAI</div>
+        <a class="btn primary c-mail" href="mailto:ahmed.aly@mbzuai.ac.ae"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>ahmed.aly@mbzuai.ac.ae</a>
+        <div class="c-links">
+          <a class="btn sm" href="https://ahmedatefahmedaly.github.io/" target="_blank" rel="noopener">Personal website</a>
+          <a class="btn sm" href="https://github.com/BioMedIA-MBZUAI/EchoAlign" target="_blank" rel="noopener">GitHub</a>
+          <a class="btn sm" href="https://huggingface.co/EchoAlign" target="_blank" rel="noopener">Hugging Face</a>
+          <a class="btn sm" href="https://mbzuai-biomedia.com/" target="_blank" rel="noopener">BioMedIA lab</a>
+        </div>
+      </div>
+      <div class="card authors-card">
+        <div class="cardhead"><div class="ct">Authors</div></div>
+        <ul class="people"><li><span class="pn"><a href="https://ahmedatefahmedaly.github.io/" target="_blank" rel="noopener">Ahmed <span class="nw">Aly</span></a><span class="nw"><sup class="af">1</sup></span></span><span class=pr>First &amp; corresponding author</span></li><li><span class="pn">Darya <span class="nw">Taratynova<sup class="af">1</sup></span></span></li><li><span class="pn"><a href="https://meclotfi.github.io/" target="_blank" rel="noopener">Lotfi Abdelkrim <span class="nw">Mecharbat</span></a><span class="nw"><sup class="af">1</sup></span></span></li><li><span class="pn">Roman A. <span class="nw">Sandler<sup class="af">2</sup></span></span></li><li><span class="pn">Joseph Z. <span class="nw">Sokol<sup class="af">2</sup></span></span></li><li><span class="pn">Joshua <span class="nw">Penn<sup class="af">2</sup></span></span></li><li><span class="pn"><a href="https://dkfz.de/en/medical-image-computing/our-team" target="_blank" rel="noopener">Klaus H. <span class="nw">Maier-Hein</span></a><span class="nw"><sup class="af">3</sup></span></span><span class=pr>Head, Medical Image Computing</span></li><li><span class="pn"><a href="https://www.numansaeed.com" target="_blank" rel="noopener">Numan <span class="nw">Saeed</span></a><span class="nw"><sup class="af">1</sup><sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup></span></span><span class=pr>Joint supervision</span></li><li><span class="pn"><a href="https://mbzuai.ac.ae/study/faculty/mohammad-yaqub/" target="_blank" rel="noopener">Mohammad <span class="nw">Yaqub</span></a><span class="nw"><sup class="af">1</sup><sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup></span></span><span class=pr>Joint supervision · BioMedIA lab</span></li></ul>
+        <ol class="affs">
+          <li><sup>1</sup>Division of Computing and Mathematical Sciences, Mohamed bin Zayed University of Artificial Intelligence, Abu Dhabi, UAE</li>
+          <li><sup>2</sup>iCardio.ai, Los Angeles, CA, USA</li>
+          <li><sup>3</sup>Division of Medical Image Computing, German Cancer Research Center (DKFZ), Heidelberg, Germany</li>
+          <li><sup class="cres" aria-label="joint supervision"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M8.72 6.95A4.2 4.2 0 1 1 5.35 0.81A3.5 3.5 0 1 0 8.72 6.95Z" fill="currentColor"/></svg></sup> These authors jointly supervised this work.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="partners">
+      <a href="https://mbzuai.ac.ae" target="_blank" rel="noopener" title="Mohamed bin Zayed University of Artificial Intelligence"><img src="assets/partners/mbzuai.svg" alt="MBZUAI" class="p-mbz"></a>
+      <a href="https://mbzuai-biomedia.com/" target="_blank" rel="noopener" title="BioMedIA lab, MBZUAI"><img src="assets/partners/biomedia.png?v=2" alt="BioMedIA lab" class="p-bm"></a>
+      <a href="https://icardio.ai" target="_blank" rel="noopener" title="iCardio.ai"><img src="assets/partners/icardio.png" alt="iCardio.ai" class="p-ic"></a>
+    </div>
+    <footer class="foot">
+      <span>CC BY-NC 4.0 code &amp; weights · <a href="https://github.com/BioMedIA-MBZUAI/EchoAlign">GitHub</a></span>
+      <span>CAMUS clips: Leclerc et al., IEEE TMI 2019, CC BY-NC-SA 4.0 · 3D heart: HuBMAP Human Reference Atlas, CC BY 4.0</span>
+      <span>All numbers are from the manuscript's tables and figures.</span>
+    </footer>
+  </div>
+</section>
+
+<!-- zoom modal -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><div id="modalTitle"></div><button class="iconbtn" id="modalClose" aria-label="Close">✕</button></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="data.js"></script>
+<script src="camus.js"></script>
+<script src="views3d.js"></script>
+<script type="module" src="heart3d.js"></script>
+<script src="app.js?v=r30"></script>
+</body>
+</html>
