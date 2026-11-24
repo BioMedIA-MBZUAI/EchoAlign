@@ -1,0 +1,30 @@
+# What scripts/run.py runs. Paths start at the repository root. Override any key on the command line with
+# --set key=value (YAML value), for example --set datasets=[cardiobench] --set steps.probes=false.
+datasets: [mimic_iv_echo, cardiobench]            # cohorts in configs/cohorts.yaml; add private where its data is available
+models: [echoalign, echoprime, panecho, echoclip, echojepa, echofm]
+# EchoJEPA and EchoFM have no zero-shot or segmentation; they are embedded and probed.
+tasks: []                                          # tasks to run; empty runs every task
+
+steps:
+  embed: true          # embed every clip; an existing file is reused only if re-embedding its first studies matches
+  zeroshot: true       # zero-shot scores (zeroshot/<model>_own.csv), joined per model into zeroshot/scores_<model>.csv
+  probes: true         # linear probes: TEST predictions and the selection record of every model
+  segmentation: true   # segmentation on CAMUS, EchoNet-Dynamic and EchoNet-Pediatric (takes days on one GPU)
+
+weights: weights/EchoAlign.pt   # EchoAlign encoder, text tower and PCA bases
+echoprime_encoders: {}           # name: EchoPrime video encoder state_dict, run as EchoPrime (embed, sections, probe)
+device: cuda:0                   # embedding and zero-shot
+batch_size: 16
+threads: 4                       # threads per probe; the probes of all models but EchoPrime run in parallel
+embed_shards: 1                  # embed in this many shards (<model>.shard-<i>-of-<n>.npz)
+embed_shard: null                # embed only this shard (0-based) and stop; null embeds every shard
+embed_args: []                   # extra scripts/embed.py flags
+
+emb_root: embeddings             # embeddings of cohort <c>: <emb_root>/<c>/<model>.npz
+out_root: results                # results of cohort <c>: <out_root>/<c>/
+seg_out: results/segmentation
+seg_args: []                     # extra scripts/segment.py flags, for example [--save-predictions]
+repos:
+  echoprime: models/EchoPrime
+  echoclip: models/echo_CLIP
+  panecho: models/PanEcho

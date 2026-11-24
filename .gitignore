@@ -1,0 +1,23 @@
+# Model weights are downloaded separately (see README); never commit them.
+weights/
+
+# Python and notebook caches
+__pycache__/
+.ipynb_checkpoints/
+
+# Manifests hold local file paths; private-cohort labels are not shared
+data/manifests/
+data/labels/private*
+# MIMIC-IV-Echo labels and split come from credentialed PhysioNet data; rebuild them with
+# scripts/make_mimic_labels.py from your own download
+data/labels/mimic_iv_echo*
+data/splits/mimic_iv_echo.csv
+# CardioBench labels are rebuilt with scripts/make_cardiobench_labels.py
+data/labels/cardiobench*
+embeddings/
+results/
+logs/
+notebooks/*.gif
+
+# Local dataset folders
+configs/datasets.local.yaml

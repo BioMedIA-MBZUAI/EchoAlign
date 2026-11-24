@@ -1,0 +1,13 @@
+# Where each public dataset is on your machine. Set the folders you downloaded, then run
+#   python scripts/make_manifests.py
+# Replace each /path/to/... with your folder and delete the datasets you do not have. See DATASETS.md.
+mimic_iv_echo: /path/to/mimic_iv_echo  # folder with files/ and echo-record-list.csv (or meta/echo-record-list.csv)
+echonet_dynamic: /path/to/echonet_dynamic  # folder with FileList.csv and Videos/
+echonet_pediatric: /path/to/echonet_pediatric  # folder with A4C/ and PSAX/
+echonet_lvh: /path/to/echonet_lvh  # folder with the videos (any subfolder layout)
+camus: /path/to/camus  # folder with database_nifti/
+tmed2: /path/to/tmed2  # folder with view_and_diagnosis_labeled_set/
+cardiacnet: /path/to/cardiacnet  # folder with CardiacNet-ASD/ and CardiacNet-PAH/
+segrwma: /path/to/segrwma  # folder with wallMotion/
+hmc_qu: /path/to/hmc_qu  # folder with the A2C and A4C videos
+internal: /path/to/internal  # private cohort (not distributed): .frames.npz clips

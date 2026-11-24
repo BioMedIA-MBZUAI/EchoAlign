@@ -1,0 +1,334 @@
+# EchoAlign zero-shot prompts, one entry per task. Written by scripts/select_prompts.py (up to 3 sentences per class, selected on private VAL for the output of the finding's structure).
+aortic_regurgitation:
+  output: aortic_valve
+  positive:
+  - Moderate to severe aortic regurgitation.
+  - Aortic regurgitation is present.
+  negative:
+  - The aortic valve is competent.
+  - No aortic regurgitation.
+aortic_root_dilation:
+  output: aortic_root
+  positive:
+  - Dilated aortic root.
+  negative:
+  - Normal aortic root dimension.
+  - No aortic root dilation.
+aortic_sclerosis:
+  output: aortic_valve
+  positive:
+  - Aortic valve sclerosis is present.
+  negative:
+  - Normal aortic valve.
+aortic_stenosis:
+  output: aortic_valve
+  positive:
+  - Severe aortic stenosis.
+  - Moderate to severe aortic stenosis.
+  negative:
+  - The aortic valve opens normally.
+  - No aortic stenosis.
+  - Aortic valve sclerosis without stenosis.
+aortic_stenosis_classification:
+  output: aortic_valve
+  positive:
+  - Severe aortic stenosis.
+  - Moderate to severe aortic stenosis.
+  negative:
+  - The aortic valve opens normally.
+  - No aortic stenosis.
+  - Aortic valve sclerosis without stenosis.
+aortic_stenosis_tmed2_public:
+  output: aortic_valve
+  positive:
+  - Severe aortic stenosis.
+  - Moderate to severe aortic stenosis.
+  negative:
+  - The aortic valve opens normally.
+  - No aortic stenosis.
+  - Aortic valve sclerosis without stenosis.
+aortic_valve_replacement:
+  output: aortic_valve
+  positive:
+  - A prosthetic aortic valve is present.
+  negative:
+  - Native aortic valve.
+ascending_aorta_dilation:
+  output: aortic_root
+  positive:
+  - Dilated ascending aorta.
+  negative:
+  - No ascending aorta dilation.
+asd_cardiacnet_public:
+  positive:
+  - THERE IS AN ATRIAL SEPTAL DEFECT WITH LEFT TO RIGHT SHUNT.
+  - ATRIAL SEPTAL DEFECT IS PRESENT.
+  - ATRIAL SEPTAL DEFECT (ASD).
+  negative:
+  - NO ATRIAL SEPTAL DEFECT IS SEEN.
+  - NO EVIDENCE OF ATRIAL SEPTAL DEFECT.
+  - INTACT ATRIAL SEPTUM WITHOUT DEFECT.
+atrial_fibrillation:
+  output: left_atrium
+  positive:
+  - Atrial fibrillation is present.
+  negative:
+  - The rhythm is regular.
+av_leaflet_degeneration:
+  output: aortic_valve
+  positive:
+  - Degenerative changes of the aortic valve leaflets.
+  negative:
+  - The aortic valve leaflets are thin and pliable.
+  - The aortic valve leaflets appear normal.
+bicuspid_av:
+  output: aortic_valve
+  positive:
+  - Bicuspid aortic valve.
+  negative:
+  - Trileaflet aortic valve.
+cardiac_tamponade:
+  positive:
+  - Cardiac tamponade.
+  - A large pericardial effusion with tamponade physiology and chamber collapse.
+  - Cardiac tamponade is present.
+  negative:
+  - No evidence of tamponade.
+  - No pericardial effusion.
+  - No cardiac tamponade.
+elevated_ra_pressure:
+  output: right_atrium
+  positive:
+  - The inferior vena cava is dilated without respiratory collapse.
+  negative:
+  - The inferior vena cava collapses normally with inspiration.
+heart_failure:
+  output: left_ventricle
+  positive:
+  - Findings consistent with heart failure.
+  negative:
+  - Normal cardiac function.
+  - No heart failure.
+ivc_dilation:
+  output: right_atrium
+  positive:
+  - The inferior vena cava is dilated.
+  negative:
+  - Normal inferior vena cava.
+la_enlargement:
+  output: left_atrium
+  positive:
+  - Left atrial enlargement is present.
+  negative:
+  - Normal left atrial size.
+lv_diastolic_dysfunction:
+  output: left_ventricle
+  positive:
+  - Grade III diastolic dysfunction with a restrictive filling pattern.
+  negative:
+  - Normal diastolic filling pattern.
+lv_enlargement:
+  output: left_ventricle
+  positive:
+  - The left ventricular cavity is severely dilated.
+  negative:
+  - Normal left ventricular size.
+lv_filling_pressure:
+  positive:
+  - Elevated left ventricular filling pressure.
+  - The left ventricular filling pressure is increased.
+  - Elevated left ventricular filling pressure is present.
+  negative:
+  - Normal left ventricular filling pressure.
+  - The left ventricular filling pressure is not increased.
+  - No elevated left ventricular filling pressure.
+lv_systolic_dysfunction:
+  output: left_ventricle
+  positive:
+  - Mildly reduced left ventricular systolic function.
+  negative:
+  - Normal left ventricular systolic function.
+  - No left ventricular systolic dysfunction.
+lvh:
+  output: left_ventricle
+  positive:
+  - Severe left ventricular hypertrophy.
+  negative:
+  - Normal left ventricular wall thickness.
+lvot_obstruction:
+  positive:
+  - Left ventricular outflow tract obstruction.
+  - There is a dynamic gradient in the left ventricular outflow tract.
+  - Left ventricular outflow tract obstruction is present.
+  negative:
+  - The left ventricular outflow tract is unobstructed.
+  - There is no gradient in the left ventricular outflow tract.
+  - No left ventricular outflow tract obstruction.
+mitraclip:
+  output: mitral_valve
+  positive:
+  - Mitral valve intervention is present.
+  negative:
+  - No mitral valve intervention.
+  - Native mitral valve.
+mitral_calcification:
+  output: mitral_valve
+  positive:
+  - Mild mitral annular calcification.
+  negative:
+  - Normal mitral annulus.
+mitral_regurgitation:
+  output: mitral_valve
+  positive:
+  - Moderate to severe mitral regurgitation.
+  negative:
+  - Trace mitral regurgitation.
+mitral_regurgitation_classification:
+  output: mitral_valve
+  positive:
+  - Moderate to severe mitral regurgitation.
+  negative:
+  - Trace mitral regurgitation.
+mitral_stenosis:
+  output: mitral_valve
+  positive:
+  - Mitral stenosis.
+  negative:
+  - Normal mitral valve inflow gradient.
+mitral_valve_device:
+  output: mitral_valve
+  positive:
+  - Mitral valve intervention is present.
+  negative:
+  - No mitral valve intervention.
+  - Native mitral valve.
+mitral_valve_prolapse:
+  output: mitral_valve
+  positive:
+  - Mitral valve prolapse is present.
+  negative:
+  - Normal mitral leaflet motion.
+mitral_valve_thickening:
+  output: mitral_valve
+  positive:
+  - The mitral valve leaflets are thickened.
+  negative:
+  - The mitral valve leaflets are thin.
+pacemaker:
+  output: global
+  positive:
+  - A pacemaker lead is present in the right heart.
+  negative:
+  - No intracardiac device is present.
+pah_cardiacnet_public:
+  output: pulmonary_artery
+  positive:
+  - Moderate pulmonary hypertension.
+  negative:
+  - No pulmonary hypertension.
+pericardial_effusion:
+  positive:
+  - Moderate pericardial effusion.
+  - Large pericardial effusion.
+  - Large circumferential pericardial effusion with tamponade physiology.
+  negative:
+  - No pericardial effusion.
+  - Trace pericardial effusion.
+  - Small pericardial effusion.
+pericardial_fat_pad:
+  output: pericardium
+  positive:
+  - An anterior echolucent space consistent with a fat pad.
+  negative:
+  - No anterior echolucent space.
+pulmonary_hypertension:
+  output: pulmonary_artery
+  positive:
+  - Moderate pulmonary hypertension.
+  negative:
+  - No pulmonary hypertension.
+pulmonic_regurgitation:
+  output: pulmonic_valve
+  positive:
+  - Pulmonic regurgitation.
+  - Pulmonic regurgitation is present.
+  negative:
+  - No pulmonic regurgitation.
+ra_enlargement:
+  output: right_atrium
+  positive:
+  - Right atrial enlargement is present.
+  negative:
+  - Normal right atrial size.
+rv_enlargement:
+  output: right_ventricle
+  positive:
+  - Severe right ventricular enlargement.
+  negative:
+  - Normal right ventricular size.
+rv_overload_septal_motion:
+  output: left_ventricle
+  positive:
+  - Abnormal interventricular septal motion.
+  negative:
+  - No septal motion abnormality.
+  - Normal interventricular septal motion.
+rv_systolic_dysfunction:
+  output: right_ventricle
+  positive:
+  - Mildly reduced right ventricular systolic function.
+  negative:
+  - Normal right ventricular systolic function.
+rwma:
+  output: left_ventricle
+  positive:
+  - Akinesis of the left ventricular apex.
+  negative:
+  - No regional wall motion abnormality.
+rwma_public:
+  output: left_ventricle
+  positive:
+  - Akinesis of the left ventricular apex.
+  negative:
+  - No regional wall motion abnormality.
+septal_motion_abnormality:
+  output: left_ventricle
+  positive:
+  - Abnormal interventricular septal motion.
+  negative:
+  - No septal motion abnormality.
+  - Normal interventricular septal motion.
+stemi_hmc_qu_public:
+  output: left_ventricle
+  positive:
+  - Akinesis of the left ventricular apex.
+  negative:
+  - No regional wall motion abnormality.
+study_quality:
+  output: global
+  positive:
+  - This is a technically difficult study.
+  negative:
+  - This is a technically adequate study.
+technically_difficult_study:
+  output: global
+  positive:
+  - This is a technically difficult study.
+  negative:
+  - This is a technically adequate study.
+tricuspid_regurgitation:
+  output: tricuspid_valve
+  positive:
+  - Moderate tricuspid regurgitation.
+  negative:
+  - Mild tricuspid regurgitation.
+  - Trace tricuspid regurgitation.
+  - The tricuspid valve is competent.
+tricuspid_regurgitation_classification:
+  output: tricuspid_valve
+  positive:
+  - Moderate tricuspid regurgitation.
+  negative:
+  - Mild tricuspid regurgitation.
+  - Trace tricuspid regurgitation.
+  - The tricuspid valve is competent.

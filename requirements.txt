@@ -1,0 +1,33 @@
+# Versions used to build and test EchoAlign (Python 3.10).
+# Video files (.avi, .mp4) also need ffmpeg and ffprobe on the system PATH.
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.57.1
+tokenizers==0.22.1
+pydicom==3.0.2
+Pillow==12.0.0
+numpy==2.2.6
+nibabel==5.3.3
+matplotlib==3.10.7
+# Evaluation scripts (embed, zero-shot, probes)
+pandas==2.3.3
+pyyaml==6.0.3
+scikit-learn==1.7.2
+scipy==1.15.3
+threadpoolctl==3.6.0
+pyarrow==22.0.0
+# Segmentation (scripts/segment.py): feature caches
+h5py==3.15.1
+# Baselines: EchoPrime and EchoCLIP use OpenCV; EchoCLIP loads through open_clip
+opencv-python-headless==5.0.0.93
+open_clip_torch==3.2.0
+# PanEcho builds its image encoder with timm
+timm==1.0.21
+# EchoJEPA's video encoder uses einops
+einops==0.8.1
+# EchoFM's model code imports simplejson and iopath through its logging module
+simplejson==4.2.0
+iopath==0.1.10
+jupyter
+ijson==3.5.0
+cairosvg

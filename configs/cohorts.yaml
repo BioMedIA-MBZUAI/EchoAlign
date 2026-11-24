@@ -1,0 +1,25 @@
+# Files and bootstrap seed key of each cohort (eval/analysis/data.py: load_cohort). Paths start at the
+# repository root. scripts/run.py and the analysis scripts read them.
+#
+# manifest         clips to embed (scripts/embed.py)
+# zeroshot_labels  labels of the zero-shot AUROC. The private cohort uses its probe labels: load_labels keeps
+#                  their TEST rows and classification tasks.
+# probe_labels     TRAIN, VAL and TEST labels of the linear probes
+# seed_key         key of the bootstrap draws: the seed is int(sha256(seed_key)[:8], 16). Never edit a seed key after the release run;
+#                  a new key gives new draws and new intervals.
+private:
+  manifest: data/manifests/private.csv
+  zeroshot_labels: data/labels/private_probe.csv
+  probe_labels: data/labels/private_probe.csv
+  seed_key: private
+mimic_iv_echo:
+  manifest: data/manifests/mimic_iv_echo.csv
+  zeroshot_labels: data/labels/mimic_iv_echo.csv
+  probe_labels: data/labels/mimic_iv_echo_probe.csv
+  seed_key: mimic/patient_cluster/absolute
+cardiobench:
+  manifest: data/manifests/cardiobench.csv
+  zeroshot_labels: data/labels/cardiobench.csv
+  probe_labels: data/labels/cardiobench_probe.csv
+  seed_key: cardiobench/cluster/absolute
+  echoprime_stills: repeat

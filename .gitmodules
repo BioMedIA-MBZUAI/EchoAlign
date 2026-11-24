@@ -1,0 +1,18 @@
+[submodule "models/EchoPrime"]
+	path = models/EchoPrime
+	url = https://github.com/echonet/EchoPrime.git
+[submodule "models/PanEcho"]
+	path = models/PanEcho
+	url = https://github.com/CarDS-Yale/PanEcho.git
+[submodule "models/echo_CLIP"]
+	path = models/echo_CLIP
+	url = https://github.com/echonet/echo_CLIP.git
+[submodule "benchmarks/CardioBench"]
+	path = benchmarks/CardioBench
+	url = https://github.com/BioMedIA-MBZUAI/CardioBench.git
+[submodule "models/EchoJEPA"]
+	path = models/EchoJEPA
+	url = https://github.com/bowang-lab/EchoJEPA.git
+[submodule "models/EchoFM"]
+	path = models/EchoFM
+	url = https://github.com/SekeunKim/EchoFM.git

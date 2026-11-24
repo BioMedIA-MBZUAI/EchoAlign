@@ -1,0 +1,41 @@
+# Patient subgroups of the paper (scripts/subgroups.py). For each cohort, each covariate reads one column of the
+# covariate table (one row per study, column study_id) and turns it into levels:
+#   bins:   numeric cut points [a, b) with labels (one more label than inner cut points)
+#   map:    value -> level; values not listed are left out
+#   rank:   categorical; levels are relabelled <prefix> 01, 02, ... by descending study count (for site IDs)
+#   threshold: level `above` when any listed column reaches its limit, else `below`; missing first column -> no level
+# Values without a level (missing covariate) are left out of that covariate.
+private:
+  age:
+    column: age
+    bins: [40, 60, 80]
+    labels: ["<40", "40-59", "60-79", ">=80"]
+  bmi:
+    column: bmi
+    bins: [25, 30, 35]
+    labels: ["<25", "25-29.9", "30-34.9", ">=35"]
+  vendor:
+    column: vendor
+  site:
+    column: site_id
+    rank: Site
+mimic_iv_echo:
+  age:
+    column: age
+    bins: [60, 80]                      # 16 TEST studies are younger than 40; merged into <60
+    labels: ["<60", "60-79", ">=80"]
+  sex:
+    column: gender
+  image_quality:
+    column: technical_quality
+    map: {Good: Good/Adequate, Adequate: Good/Adequate, Suboptimal: Suboptimal/Poor, Poor: Suboptimal/Poor}
+  scanner_model:
+    column: scanner_model
+  bmi:
+    column: bmi
+    bins: [25, 30, 35]
+    labels: ["<25", "25-29.9", "30-34.9", ">=35"]
+  blood_pressure:
+    threshold: {resting_sbp: 140, resting_dbp: 90}
+    above: ">=140/90"
+    below: "<140/90"

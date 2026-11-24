@@ -1,0 +1,62 @@
+# Severity-grade tasks of the private cohort (task <name>_grade, mode ordinal).
+#
+# source   name of the finding in the private label files
+# grades   the grade scale, normal first. Grades are never merged. A grade with no study in any split is not a
+#          level; the label is the position on the scale that remains. A task needs at least three levels,
+#          each present in TRAIN, VAL and TEST.
+# exclude  raw labels that are not on the scale (not assessable, ungraded, or a compound grade such as
+#          mild_to_moderate). A raw label in neither list stops the script.
+# grader   sclerosis: grades come from the report text, not from the label file.
+aortic_regurgitation:
+  source: aortic_regurgitation
+  grades: [normal, trace, mild, moderate, severe]
+  exclude: [not_assessable, mild_to_moderate, moderate_to_severe]
+aortic_root_dilation:
+  source: aortic_root
+  grades: [normal, borderline, mild, moderate, severe]
+  exclude: [not_assessable, unable_to_assess, dilated]
+aortic_sclerosis:
+  source: aortic_sclerosis
+  grader: sclerosis
+  grades: [normal, minimal, mild, moderate, severe]
+  exclude: [not_assessable, ungraded, compound]
+aortic_stenosis:
+  source: aortic_stenosis
+  grades: [normal, mild, moderate, severe]
+  exclude: [not_assessable, mild_to_moderate, moderate_to_severe]
+la_enlargement:
+  source: lavi
+  grades: [normal, mild, moderate, severe]
+  exclude: [enlarged]
+lv_diastolic_dysfunction:
+  source: lv_diastolic_function
+  grades: [normal, grade_i, grade_ii, grade_iii]
+  exclude: [not_assessable, diastolic_dysfunction]
+lv_enlargement:
+  source: left_ventricle
+  grades: [normal, mild_enlargement, moderate_enlargement, severe_enlargement]
+  exclude: [not_assessable, enlargement]
+lv_systolic_dysfunction:
+  source: lv_systolic_function
+  grades: [normal, mildly_reduced, moderately_reduced, severely_reduced]
+  exclude: [not_assessable, reduced]
+lvh:
+  source: lvh
+  grades: [normal, borderline, mild, moderate, severe]
+  exclude: [not_assessable]
+mitral_calcification:
+  source: mitral_calcification
+  grades: [no_mitral_calcification, mac_mild, mac_moderate, mac_severe]
+  exclude: [not_assessable, mac_present_unspecified]
+mitral_regurgitation:
+  source: mitral_regurgitation
+  grades: [normal, trace, mild, moderate, severe]
+  exclude: [not_assessable, mild_to_moderate, moderate_to_severe]
+pulmonary_hypertension:
+  source: pa_pressure
+  grades: [normal, borderline, mild, moderate, severe]
+  exclude: [not_assessable, unable_to_assess, elevated]
+tricuspid_regurgitation:
+  source: tricuspid_regurgitation
+  grades: [normal, trace, mild, moderate, severe]
+  exclude: [not_assessable, mild_to_moderate, moderate_to_severe]

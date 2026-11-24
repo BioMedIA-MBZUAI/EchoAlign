@@ -1,0 +1,657 @@
+# Zero-shot task configuration for the four models.
+#
+# Each cohort lists its binary tasks. For each task:
+#   echoalign.structure  anatomical output used for scoring (null = global output). Prompts come from a
+#                         separate prompt file (see README).
+#   echoprime.output      phenotype scored by EchoPrime's report retrieval; rule 'label' = retrieved mean,
+#                         'neg' = minus the retrieved mean.
+#   panecho.output        PanEcho task head; rule 'binary', 'reg' (head value), 'expgrade' (expected grade),
+#                         or 'pos:<class>;<class>' (sum of the named class probabilities).
+#   echoclip.output       key in EchoCLIP's prompts_used.json; rule 'binary' (all prompts),
+#                         'grades:<v>,<v>' (prompts of the listed grades), 'reg' or 'negreg' (value regression).
+#   boundary              match: the output's definition equals the task's positive boundary;
+#                         mismatch: it differs (see note); unknown: the source does not document it;
+#                         proxy: a continuous or related measurement ranks the studies.
+# A baseline without an entry has no output for that task. EchoAlign scores every task that has prompts.
+private:
+  aortic_regurgitation:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: aortic_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AVRegurg
+      rule: pos:Moderate|Severe
+      boundary: match
+  aortic_root_dilation:
+    echoalign:
+      structure: aortic_root
+    echoprime:
+      output: aortic_root_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AORoot
+      rule: reg
+      boundary: proxy
+      note: root diameter in cm
+  aortic_sclerosis:
+    echoalign:
+      structure: aortic_valve
+  aortic_stenosis_classification:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: aortic_stenosis
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AVStenosis
+      rule: expgrade
+      boundary: mismatch
+      note: head groups mild with moderate; expected grade
+  aortic_valve_replacement:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: tavr
+      rule: label
+      boundary: mismatch
+      note: TAVR label vs any aortic valve replacement
+    echoclip:
+      output: tavr
+      rule: binary
+      boundary: mismatch
+      note: stent-valve prompt vs any aortic valve replacement
+  ascending_aorta_dilation:
+    echoalign:
+      structure: aortic_root
+  atrial_fibrillation:
+    echoalign:
+      structure: left_atrium
+    echoclip:
+      output: atrial_fibrillation
+      rule: binary
+      boundary: match
+  av_leaflet_degeneration:
+    echoalign:
+      structure: aortic_valve
+  bicuspid_av:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: bicuspid_aov_morphology
+      rule: label
+      boundary: match
+    panecho:
+      output: AVStructure
+      rule: binary
+      boundary: match
+      note: bicuspid
+  elevated_ra_pressure:
+    echoalign:
+      structure: right_atrium
+    panecho:
+      output: RAP-8-or-higher
+      rule: binary
+      boundary: match
+    echoclip:
+      output: right_atrial_pressure
+      rule: grades:1,2
+      boundary: match
+  heart_failure:
+    echoalign:
+      structure: left_ventricle
+  ivc_dilation:
+    echoalign:
+      structure: right_atrium
+    echoprime:
+      output: dilated_ivc
+      rule: label
+      boundary: match
+  la_enlargement:
+    echoalign:
+      structure: left_atrium
+    echoprime:
+      output: left_atrium_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: LASize
+      rule: pos:Moderately|Severely Dilated
+      boundary: match
+    echoclip:
+      output: left_atrium_size
+      rule: grades:2,3
+      boundary: match
+  lv_diastolic_dysfunction:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVDiastolicFunction
+      rule: pos:Mild|Indeterminate;Moderate|Severe
+      boundary: mismatch
+      note: positive classes include indeterminate
+  lv_enlargement:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVSize
+      rule: pos:Moderately|Severely Increased
+      boundary: match
+    echoclip:
+      output: left_ventricle_size
+      rule: grades:2,3
+      boundary: match
+  lv_systolic_dysfunction:
+    echoalign:
+      structure: left_ventricle
+    echoprime:
+      output: ejection_fraction
+      rule: neg
+      boundary: proxy
+      note: score = -retrieved EF
+    panecho:
+      output: LVSystolicFunction
+      rule: pos:Mildly Decreased;Moderately|Severely Decreased
+      boundary: match
+    echoclip:
+      output: ejection_fraction
+      rule: negreg
+      boundary: proxy
+      note: score = -predicted EF
+  lvh:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVWallThickness-increased-modsev
+      rule: binary
+      boundary: match
+    echoclip:
+      output: lv_hypertrophy
+      rule: grades:2,3
+      boundary: match
+  mitraclip:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitraclip
+      rule: label
+      boundary: mismatch
+      note: MitraClip label vs any mitral intervention or device
+    echoclip:
+      output: mitraclip
+      rule: binary
+      boundary: mismatch
+      note: MitraClip prompts vs any mitral intervention or device
+  mitral_calcification:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitral_annular_calcification
+      rule: label
+      boundary: match
+  mitral_regurgitation_classification:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitral_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: MVRegurgitation
+      rule: pos:Moderate|Severe
+      boundary: match
+  mitral_stenosis:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitral_stenosis
+      rule: label
+      boundary: unknown
+    panecho:
+      output: MVStenosis
+      rule: binary
+      boundary: match
+      note: any grade
+  mitral_valve_prolapse:
+    echoalign:
+      structure: mitral_valve
+  mitral_valve_thickening:
+    echoalign:
+      structure: mitral_valve
+  pacemaker:
+    echoalign:
+      structure: null
+    echoprime:
+      output: pacemaker
+      rule: label
+      boundary: match
+    echoclip:
+      output: pacemaker
+      rule: binary
+      boundary: match
+  pericardial_fat_pad:
+    echoalign:
+      structure: pericardium
+  pulmonary_hypertension:
+    echoalign:
+      structure: pulmonary_artery
+    echoprime:
+      output: pulmonary_artery_pressure_continuous
+      rule: label
+      boundary: proxy
+      note: retrieved PA pressure
+    panecho:
+      output: RVSP
+      rule: reg
+      boundary: proxy
+      note: RVSP in mmHg
+    echoclip:
+      output: pulmonary_artery_pressure_continuous
+      rule: reg
+      boundary: proxy
+      note: predicted PA pressure
+  pulmonic_regurgitation:
+    echoalign:
+      structure: pulmonic_valve
+  ra_enlargement:
+    echoalign:
+      structure: right_atrium
+    echoprime:
+      output: right_atrium_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: RASize
+      rule: binary
+      boundary: mismatch
+      note: head = any dilation; task >= moderate
+    echoclip:
+      output: right_atrium_size
+      rule: grades:2,3
+      boundary: match
+  rv_enlargement:
+    echoalign:
+      structure: right_ventricle
+    echoprime:
+      output: right_ventricle_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: RVSize
+      rule: pos:Moderately|Severely Increased
+      boundary: match
+    echoclip:
+      output: right_ventricle_size
+      rule: grades:2,3
+      boundary: match
+  rv_systolic_dysfunction:
+    echoalign:
+      structure: right_ventricle
+    echoprime:
+      output: rv_systolic_function_depressed
+      rule: label
+      boundary: match
+    panecho:
+      output: RVSystolicFunction
+      rule: binary
+      boundary: match
+      note: decreased
+  rwma:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVWallMotionAbnormalities
+      rule: binary
+      boundary: match
+  septal_motion_abnormality:
+    echoalign:
+      structure: left_ventricle
+  study_quality:
+    echoalign:
+      structure: null
+  tricuspid_regurgitation_classification:
+    echoalign:
+      structure: tricuspid_valve
+    echoprime:
+      output: tricuspid_valve_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: TVRegurgitation
+      rule: pos:Moderate|Severe
+      boundary: match
+mimic_iv_echo:
+  aortic_regurgitation:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: aortic_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AVRegurg
+      rule: pos:Moderate|Severe
+      boundary: match
+  aortic_root_dilation:
+    echoalign:
+      structure: aortic_root
+    echoprime:
+      output: aortic_root_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AORoot
+      rule: reg
+      boundary: proxy
+      note: root diameter in cm
+  aortic_stenosis:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: aortic_stenosis
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AVStenosis
+      rule: expgrade
+      boundary: mismatch
+      note: head groups mild with moderate; expected grade
+  aortic_valve_replacement:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: tavr
+      rule: label
+      boundary: mismatch
+      note: TAVR label vs any aortic valve replacement
+    echoclip:
+      output: tavr
+      rule: binary
+      boundary: mismatch
+      note: stent-valve prompt vs any aortic valve replacement
+  ascending_aorta_dilation:
+    echoalign:
+      structure: aortic_root
+  av_leaflet_degeneration:
+    echoalign:
+      structure: aortic_valve
+  cardiac_tamponade:
+    echoalign:
+      structure: null
+    echoclip:
+      output: pericardial_effusion
+      rule: grades:4
+      boundary: match
+      note: tamponade prompts
+  ivc_dilation:
+    echoalign:
+      structure: right_atrium
+    echoprime:
+      output: dilated_ivc
+      rule: label
+      boundary: match
+  la_enlargement:
+    echoalign:
+      structure: left_atrium
+    echoprime:
+      output: left_atrium_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: LASize
+      rule: pos:Moderately|Severely Dilated
+      boundary: match
+    echoclip:
+      output: left_atrium_size
+      rule: grades:2,3
+      boundary: match
+  lv_diastolic_dysfunction:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVDiastolicFunction
+      rule: pos:Mild|Indeterminate;Moderate|Severe
+      boundary: mismatch
+      note: positive classes include indeterminate
+  lv_enlargement:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVSize
+      rule: pos:Moderately|Severely Increased
+      boundary: match
+    echoclip:
+      output: left_ventricle_size
+      rule: grades:2,3
+      boundary: match
+  lv_filling_pressure:
+    echoalign:
+      structure: null
+    panecho:
+      output: E|EAvg
+      rule: reg
+      boundary: proxy
+      note: E/e' ratio
+  lv_systolic_dysfunction:
+    echoalign:
+      structure: left_ventricle
+    echoprime:
+      output: ejection_fraction
+      rule: neg
+      boundary: proxy
+      note: score = -retrieved EF
+    panecho:
+      output: LVSystolicFunction
+      rule: pos:Mildly Decreased;Moderately|Severely Decreased
+      boundary: match
+    echoclip:
+      output: ejection_fraction
+      rule: negreg
+      boundary: proxy
+      note: score = -predicted EF
+  lvh:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVWallThickness-increased-modsev
+      rule: binary
+      boundary: match
+    echoclip:
+      output: lv_hypertrophy
+      rule: grades:2,3
+      boundary: match
+  lvot_obstruction:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVOT20mmHg
+      rule: binary
+      boundary: mismatch
+      note: head >= 20 mmHg; task any gradient
+  mitral_regurgitation:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitral_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: MVRegurgitation
+      rule: pos:Moderate|Severe
+      boundary: match
+  mitral_stenosis:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitral_stenosis
+      rule: label
+      boundary: unknown
+    panecho:
+      output: MVStenosis
+      rule: binary
+      boundary: match
+      note: any grade
+  mitral_valve_device:
+    echoalign:
+      structure: mitral_valve
+    echoprime:
+      output: mitraclip
+      rule: label
+      boundary: mismatch
+      note: MitraClip label vs any mitral intervention or device
+    echoclip:
+      output: mitraclip
+      rule: binary
+      boundary: mismatch
+      note: MitraClip prompts vs any mitral intervention or device
+  mitral_valve_prolapse:
+    echoalign:
+      structure: mitral_valve
+  mitral_valve_thickening:
+    echoalign:
+      structure: mitral_valve
+  pericardial_effusion:
+    echoalign:
+      structure: null
+    echoprime:
+      output: pericardial_effusion
+      rule: label
+      boundary: unknown
+    panecho:
+      output: pericardial-effusion
+      rule: binary
+      boundary: mismatch
+      note: head = mild or worse; task >= moderate
+    echoclip:
+      output: pericardial_effusion
+      rule: grades:2,3,4
+      boundary: match
+  pulmonary_hypertension:
+    echoalign:
+      structure: pulmonary_artery
+    echoprime:
+      output: pulmonary_artery_pressure_continuous
+      rule: label
+      boundary: proxy
+      note: retrieved PA pressure
+    panecho:
+      output: RVSP
+      rule: reg
+      boundary: proxy
+      note: RVSP in mmHg
+    echoclip:
+      output: pulmonary_artery_pressure_continuous
+      rule: reg
+      boundary: proxy
+      note: predicted PA pressure
+  pulmonic_regurgitation:
+    echoalign:
+      structure: pulmonic_valve
+  ra_enlargement:
+    echoalign:
+      structure: right_atrium
+    echoprime:
+      output: right_atrium_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: RASize
+      rule: binary
+      boundary: mismatch
+      note: head = any dilation; task >= moderate
+    echoclip:
+      output: right_atrium_size
+      rule: grades:2,3
+      boundary: match
+  rv_enlargement:
+    echoalign:
+      structure: right_ventricle
+    echoprime:
+      output: right_ventricle_dilation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: RVSize
+      rule: pos:Moderately|Severely Increased
+      boundary: match
+    echoclip:
+      output: right_ventricle_size
+      rule: grades:2,3
+      boundary: match
+  rv_overload_septal_motion:
+    echoalign:
+      structure: left_ventricle
+  rv_systolic_dysfunction:
+    echoalign:
+      structure: right_ventricle
+    echoprime:
+      output: rv_systolic_function_depressed
+      rule: label
+      boundary: match
+    panecho:
+      output: RVSystolicFunction
+      rule: binary
+      boundary: match
+      note: decreased
+  technically_difficult_study:
+    echoalign:
+      structure: null
+  tricuspid_regurgitation:
+    echoalign:
+      structure: tricuspid_valve
+    echoprime:
+      output: tricuspid_valve_regurgitation
+      rule: label
+      boundary: unknown
+    panecho:
+      output: TVRegurgitation
+      rule: pos:Moderate|Severe
+      boundary: match
+cardiobench:
+  aortic_stenosis_tmed2_public:
+    echoalign:
+      structure: aortic_valve
+    echoprime:
+      output: aortic_stenosis
+      rule: label
+      boundary: unknown
+    panecho:
+      output: AVStenosis
+      rule: expgrade
+      boundary: mismatch
+      note: head groups mild with moderate; expected grade
+  asd_cardiacnet_public:
+    echoalign:
+      structure: null
+  pah_cardiacnet_public:
+    echoalign:
+      structure: pulmonary_artery
+    echoprime:
+      output: pulmonary_artery_pressure_continuous
+      rule: label
+      boundary: proxy
+      note: retrieved PA pressure
+    panecho:
+      output: RVSP
+      rule: reg
+      boundary: proxy
+      note: RVSP in mmHg
+    echoclip:
+      output: pulmonary_artery_pressure_continuous
+      rule: reg
+      boundary: proxy
+      note: predicted PA pressure
+  rwma_public:
+    echoalign:
+      structure: left_ventricle
+    panecho:
+      output: LVWallMotionAbnormalities
+      rule: binary
+      boundary: match
+  stemi_hmc_qu_public:
+    echoalign:
+      structure: left_ventricle

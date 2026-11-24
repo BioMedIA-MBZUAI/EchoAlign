@@ -1,0 +1,225 @@
+# EchoPrime report section used for each task (EchoPrime section pooling,
+# eval/analysis/echoprime_sections.py).
+#
+# For each task:
+#   section    row of EchoPrime's assets/MIL_weights.csv (by name); null = no matching section.
+#   source     'EchoPrime map': the task matches by meaning a phenotype that EchoPrime's own
+#                assets/section_to_phenotypes.pkl assigns to this section (phenotype names it);
+#              'name match': no EchoPrime phenotype covers the task, and the section is the one whose
+#                name matches the task's structure;
+#              'no section': no section fits; the mean of the 15 section embeddings is used.
+#   phenotype  EchoPrime phenotype matched by meaning ('EchoPrime map' only).
+#   mode       classification (default), regression or ordinal (severity grades).
+#   note       why a choice is not one-to-one.
+private:
+  aortic_regurgitation: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_regurgitation}
+  aortic_root_dilation: {section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation}
+  aortic_sclerosis: {section: Aortic Valve, source: name match}
+  aortic_stenosis_classification: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis}
+  aortic_valve_replacement:
+    section: Aortic Valve
+    source: EchoPrime map
+    phenotype: tavr
+    note: EchoPrime's phenotype is TAVR; the task is any aortic valve replacement
+  ascending_aorta_dilation: {section: Aorta, source: name match}
+  atrial_fibrillation:
+    section: null
+    source: no section
+    note: a rhythm finding, not a structure
+  av_leaflet_degeneration: {section: Aortic Valve, source: name match}
+  bicuspid_av: {section: Aortic Valve, source: EchoPrime map, phenotype: bicuspid_aov_morphology}
+  elevated_ra_pressure:
+    section: Right Atrium
+    source: name match
+    note: right atrial pressure is estimated from the inferior vena cava; IVC is the alternative section
+  heart_failure:
+    section: null
+    source: no section
+    note: a clinical syndrome, not a structure
+  ivc_dilation: {section: IVC, source: EchoPrime map, phenotype: dilated_ivc}
+  la_enlargement: {section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation}
+  lv_diastolic_dysfunction: {section: Left Ventricle, source: name match}
+  lv_enlargement: {section: Left Ventricle, source: name match}
+  lv_systolic_dysfunction:
+    section: Left Ventricle
+    source: EchoPrime map
+    phenotype: ejection_fraction
+    note: reduced ejection fraction
+  lvh: {section: Left Ventricle, source: name match}
+  mitraclip:
+    section: Mitral Valve
+    source: EchoPrime map
+    phenotype: mitraclip
+  mitral_calcification: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_annular_calcification}
+  mitral_regurgitation_classification: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_regurgitation}
+  mitral_stenosis: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_stenosis}
+  mitral_valve_prolapse: {section: Mitral Valve, source: name match}
+  mitral_valve_thickening: {section: Mitral Valve, source: name match}
+  pacemaker:
+    section: Right Ventricle
+    source: EchoPrime map
+    phenotype: pacemaker
+    note: EchoPrime assigns the pacemaker phenotype to the right ventricle section (lead in the right heart)
+  pericardial_effusion: {section: Pericardium, source: EchoPrime map, phenotype: pericardial_effusion}
+  pericardial_fat_pad: {section: Pericardium, source: name match}
+  pulmonary_hypertension:
+    section: Pulmonary Artery
+    source: EchoPrime map
+    phenotype: pulmonary_artery_pressure_continuous
+    note: elevated pulmonary artery pressure
+  pulmonic_regurgitation: {section: Pulmonic Valve, source: name match}
+  ra_enlargement: {section: Right Atrium, source: EchoPrime map, phenotype: right_atrium_dilation}
+  rv_enlargement: {section: Right Ventricle, source: EchoPrime map, phenotype: right_ventricle_dilation}
+  rv_systolic_dysfunction: {section: Right Ventricle, source: EchoPrime map, phenotype: rv_systolic_function_depressed}
+  rwma: {section: Resting Segmental Wall Motion Analysis, source: name match}
+  septal_motion_abnormality:
+    section: Resting Segmental Wall Motion Analysis
+    source: name match
+    note: septal motion is a wall-motion finding; Left Ventricle is the alternative section
+  study_quality:
+    section: null
+    source: no section
+    note: image quality has no structure
+  tricuspid_regurgitation_classification: {section: Tricuspid Valve, source: EchoPrime map, phenotype: tricuspid_valve_regurgitation}
+  # Regression targets.
+  aortic_root_dimension: {mode: regression, section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation, note: root diameter vs root dilation}
+  ejection_fraction: {mode: regression, section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction}
+  lavi: {mode: regression, section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation, note: left atrial volume index vs dilation}
+  pa_pressure: {mode: regression, section: Pulmonary Artery, source: EchoPrime map, phenotype: pulmonary_artery_pressure_continuous}
+  rvsp:
+    mode: regression
+    section: Pulmonary Artery
+    source: EchoPrime map
+    phenotype: pulmonary_artery_pressure_continuous
+    note: right ventricular systolic pressure equals systolic pulmonary artery pressure without pulmonic stenosis; it is measured from the tricuspid regurgitation jet (Tricuspid Valve is the alternative section)
+  transaortic_mean_gradient: {mode: regression, section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, note: gradient grades aortic stenosis}
+  transaortic_peak_gradient: {mode: regression, section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, note: gradient grades aortic stenosis}
+  transaortic_peak_velocity: {mode: regression, section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, note: velocity grades aortic stenosis}
+  aortic_sclerosis_grade: {section: Aortic Valve, source: name match, mode: ordinal}  # grades of aortic_sclerosis
+  aortic_regurgitation_grade: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_regurgitation, mode: ordinal}  # grades of aortic_regurgitation
+  aortic_root_dilation_grade: {section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation, mode: ordinal}  # grades of aortic_root_dilation
+  aortic_stenosis_grade: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, mode: ordinal}  # grades of aortic_stenosis_classification
+  la_enlargement_grade: {section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation, mode: ordinal}  # grades of la_enlargement
+  lv_enlargement_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lv_enlargement
+  lv_diastolic_dysfunction_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lv_diastolic_dysfunction
+  lv_systolic_dysfunction_grade: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: ordinal}  # grades of lv_systolic_dysfunction
+  lvh_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lvh
+  mitral_calcification_grade: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_annular_calcification, mode: ordinal}  # grades of mitral_calcification
+  mitral_regurgitation_grade: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_regurgitation, mode: ordinal}  # grades of mitral_regurgitation_classification
+  pulmonary_hypertension_grade: {section: Pulmonary Artery, source: EchoPrime map, phenotype: pulmonary_artery_pressure_continuous, mode: ordinal}  # grades of pulmonary_hypertension
+  tricuspid_regurgitation_grade: {section: Tricuspid Valve, source: EchoPrime map, phenotype: tricuspid_valve_regurgitation, mode: ordinal}  # grades of tricuspid_regurgitation_classification
+
+mimic_iv_echo:
+  aortic_regurgitation: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_regurgitation}
+  aortic_root_dilation: {section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation}
+  aortic_stenosis: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis}
+  aortic_valve_replacement:
+    section: Aortic Valve
+    source: EchoPrime map
+    phenotype: tavr
+    note: EchoPrime's phenotype is TAVR; the task is any aortic valve replacement
+  ascending_aorta_dilation: {section: Aorta, source: name match}
+  av_leaflet_degeneration: {section: Aortic Valve, source: name match}
+  cardiac_tamponade: {section: Pericardium, source: name match}
+  ivc_dilation: {section: IVC, source: EchoPrime map, phenotype: dilated_ivc}
+  la_enlargement: {section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation}
+  lv_diastolic_dysfunction: {section: Left Ventricle, source: name match}
+  lv_enlargement: {section: Left Ventricle, source: name match}
+  lv_filling_pressure:
+    section: Left Ventricle
+    source: name match
+    note: filling pressure is estimated from left ventricular diastolic indices; Left Atrium is the alternative section
+  lv_systolic_dysfunction:
+    section: Left Ventricle
+    source: EchoPrime map
+    phenotype: ejection_fraction
+    note: reduced ejection fraction
+  lvh: {section: Left Ventricle, source: name match}
+  lvot_obstruction:
+    section: Left Ventricle
+    source: name match
+    note: the outflow tract is reported with the left ventricle; Aortic Valve is the alternative section
+  mitral_regurgitation: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_regurgitation}
+  mitral_stenosis: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_stenosis}
+  mitral_valve_device:
+    section: Mitral Valve
+    source: EchoPrime map
+    phenotype: mitraclip
+    note: EchoPrime's phenotype is MitraClip; the task is any mitral valve device
+  mitral_valve_prolapse: {section: Mitral Valve, source: name match}
+  mitral_valve_thickening: {section: Mitral Valve, source: name match}
+  pericardial_effusion: {section: Pericardium, source: EchoPrime map, phenotype: pericardial_effusion}
+  pulmonary_hypertension:
+    section: Pulmonary Artery
+    source: EchoPrime map
+    phenotype: pulmonary_artery_pressure_continuous
+    note: elevated pulmonary artery pressure
+  pulmonic_regurgitation: {section: Pulmonic Valve, source: name match}
+  ra_enlargement: {section: Right Atrium, source: EchoPrime map, phenotype: right_atrium_dilation}
+  rv_enlargement: {section: Right Ventricle, source: EchoPrime map, phenotype: right_ventricle_dilation}
+  rv_overload_septal_motion:
+    section: Resting Segmental Wall Motion Analysis
+    source: name match
+    note: septal motion is a wall-motion finding (as septal_motion_abnormality of the private cohort); Right Ventricle is the alternative section
+  rv_systolic_dysfunction: {section: Right Ventricle, source: EchoPrime map, phenotype: rv_systolic_function_depressed}
+  technically_difficult_study:
+    section: null
+    source: no section
+    note: image quality has no structure (as study_quality of the private cohort)
+  tricuspid_regurgitation: {section: Tricuspid Valve, source: EchoPrime map, phenotype: tricuspid_valve_regurgitation}
+  # Regression targets.
+  av_mean_grad: {mode: regression, section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, note: gradient grades aortic stenosis}
+  av_pk_vel: {mode: regression, section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, note: velocity grades aortic stenosis}
+  la_vol: {mode: regression, section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation, note: left atrial volume vs dilation}
+  lvedd: {mode: regression, section: Left Ventricle, source: name match}
+  lvef: {mode: regression, section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction}
+  lvesd: {mode: regression, section: Left Ventricle, source: name match}
+  mv_peak_e_a: {mode: regression, section: Mitral Valve, source: name match, note: mitral inflow E/A; Left Ventricle (diastolic function) is the alternative section}
+  rest_lvot: {mode: regression, section: Left Ventricle, source: name match, note: outflow tract gradient; Aortic Valve is the alternative section}
+  sinus_diam: {mode: regression, section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation, note: sinus diameter vs root dilation}
+  tapse: {mode: regression, section: Right Ventricle, source: EchoPrime map, phenotype: rv_systolic_function_depressed, note: TAPSE grades right ventricular systolic function}
+  tr_velocity:
+    mode: regression
+    section: Tricuspid Valve
+    source: name match
+    note: the tricuspid regurgitation jet velocity estimates pulmonary artery pressure; Pulmonary Artery is the alternative section
+  tricuspid_regurgitation_nonone_grade: {section: Tricuspid Valve, source: EchoPrime map, phenotype: tricuspid_valve_regurgitation, mode: ordinal}  # grades of tricuspid_regurgitation
+  mitral_regurgitation_nonone_grade: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_regurgitation, mode: ordinal}  # grades of mitral_regurgitation
+  aortic_regurgitation_nonone_grade: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_regurgitation, mode: ordinal}  # grades of aortic_regurgitation
+  pulmonary_hypertension_grade: {section: Pulmonary Artery, source: EchoPrime map, phenotype: pulmonary_artery_pressure_continuous, mode: ordinal}  # grades of pulmonary_hypertension
+  la_enlargement_grade: {section: Left Atrium, source: EchoPrime map, phenotype: left_atrium_dilation, mode: ordinal}  # grades of la_enlargement
+  ra_enlargement_grade: {section: Right Atrium, source: EchoPrime map, phenotype: right_atrium_dilation, mode: ordinal}  # grades of ra_enlargement
+  rv_enlargement_grade: {section: Right Ventricle, source: EchoPrime map, phenotype: right_ventricle_dilation, mode: ordinal}  # grades of rv_enlargement
+  lv_enlargement_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lv_enlargement
+  lvh_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lvh
+  rv_systolic_dysfunction_grade: {section: Right Ventricle, source: EchoPrime map, phenotype: rv_systolic_function_depressed, mode: ordinal}  # grades of rv_systolic_dysfunction
+  av_leaflet_thickening_grade: {section: Aortic Valve, source: name match, mode: ordinal}  # grades of av_leaflet_degeneration
+  lv_diastolic_dysfunction_grade: {section: Left Ventricle, source: name match, mode: ordinal}  # grades of lv_diastolic_dysfunction
+  aortic_stenosis_grade: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis, mode: ordinal}  # grades of aortic_stenosis
+  lv_systolic_dysfunction_grade: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: ordinal}  # grades of lv_systolic_dysfunction
+  lv_ef_band_grade: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: ordinal}  # grades of lv_systolic_dysfunction
+  mitral_valve_thickening_grade: {section: Mitral Valve, source: name match, mode: ordinal}  # grades of mitral_valve_thickening
+  mitral_valve_prolapse_grade: {section: Mitral Valve, source: name match, mode: ordinal}  # grades of mitral_valve_prolapse
+  mitral_annular_calcification_nonone_grade: {section: Mitral Valve, source: EchoPrime map, phenotype: mitral_annular_calcification, mode: ordinal}
+  aortic_root_dilation_grade: {section: Aorta, source: EchoPrime map, phenotype: aortic_root_dilation, mode: ordinal}  # grades of aortic_root_dilation
+  pericardial_effusion_nonone_grade: {section: Pericardium, source: EchoPrime map, phenotype: pericardial_effusion, mode: ordinal}  # grades of pericardial_effusion
+
+cardiobench:
+  aortic_stenosis_tmed2_public: {section: Aortic Valve, source: EchoPrime map, phenotype: aortic_stenosis}
+  asd_cardiacnet_public: {section: Atrial Septum, source: name match}
+  rwma_public: {section: Resting Segmental Wall Motion Analysis, source: name match}
+  stemi_hmc_qu_public:
+    section: Resting Segmental Wall Motion Analysis
+    source: name match
+    note: HMC-QU labels myocardial infarction from regional wall motion
+  pah_cardiacnet_public:
+    section: Pulmonary Artery
+    source: EchoPrime map
+    phenotype: pulmonary_artery_pressure_continuous
+    note: pulmonary arterial hypertension vs predicted pulmonary artery pressure
+  ejection_fraction_public: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: regression}
+  ejection_fraction_camus_public: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: regression}
+  ejection_fraction_pediatric_public: {section: Left Ventricle, source: EchoPrime map, phenotype: ejection_fraction, mode: regression}
+  ivsd_lvh_public: {section: Left Ventricle, source: name match, mode: regression}
+  lvidd_lvh_public: {section: Left Ventricle, source: name match, mode: regression}
+  lvpwd_lvh_public: {section: Left Ventricle, source: name match, mode: regression}

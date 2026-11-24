@@ -1,0 +1,55 @@
+# ROC figures of scripts/plot_roc.py, in the style of the paper's other figures. A color means one thing only:
+# the four model colors are for models; findings are black; grades use the paper's warm
+# grey ramp, light (lowest) to dark, and a grade cut point is drawn in the color of the grade it starts at.
+models: [echoalign, echoprime, panecho, echoclip]
+model_style:
+  echoalign: {name: EchoAlign, color: "#E8A33D", dash: solid}
+  echoprime: {name: EchoPrime, color: "#1F3A5F", dash: solid}
+  panecho: {name: PanEcho, color: "#4F78A8", dash: [5, 2.5]}
+  echoclip: {name: EchoCLIP, color: "#8FA9C8", dash: [1.6, 2]}
+grade_shades: ["#c9c8c1", "#a3a199", "#7c7a72", "#55544f", "#1a1a1a"]
+style:
+  ink: "#1a1a1a"
+  axis: "#55544f"
+  grid: "#DCE5F0"
+  band: "#e6e5e0"
+  font: [Helvetica, Arial, DejaVu Sans]
+
+mimic_iv_echo:
+  severity:
+    - {task: aortic_stenosis_grade, title: Aortic stenosis, grades: [None, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+    - {task: mitral_regurgitation_nonone_grade, title: Mitral regurgitation, grades: [Trace, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+    - {task: tricuspid_regurgitation_nonone_grade, title: Tricuspid regurgitation, grades: [Trace, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+    - {task: lv_systolic_dysfunction_grade, title: LV systolic dysfunction, grades: [Normal, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+  findings:
+    model: echoalign
+    cohort_title: MIMIC-IV-Echo
+    cut_title: moderate or worse
+    tasks:
+      mitral_regurgitation_nonone_grade: {title: Mitral regurgitation, cut: 2}
+      tricuspid_regurgitation_nonone_grade: {title: Tricuspid regurgitation, cut: 2}
+      aortic_stenosis_grade: {title: Aortic stenosis, cut: 2}
+
+private:
+  severity:
+    - {task: aortic_stenosis_grade, title: Aortic stenosis, grades: [Normal, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+    - {task: mitral_regurgitation_grade, title: Mitral regurgitation, grades: [Normal, Trace, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 3, Severe: 4}}
+    - {task: tricuspid_regurgitation_grade, title: Tricuspid regurgitation, grades: [Normal, Trace, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 3, Severe: 4}}
+    - {task: lv_systolic_dysfunction_grade, title: LV systolic dysfunction, grades: [Normal, Mild, Moderate, Severe],
+       cuts: {Moderate or worse: 2, Severe: 3}}
+  findings:
+    model: echoalign
+    cohort_title: private test set
+    cut_title: moderate or worse
+    tasks:
+      mitral_regurgitation_grade: {title: Mitral regurgitation, cut: 3}
+      tricuspid_regurgitation_grade: {title: Tricuspid regurgitation, cut: 3}
+      aortic_stenosis_grade: {title: Aortic stenosis, cut: 2}
+      aortic_regurgitation_grade: {title: Aortic regurgitation, cut: 3}

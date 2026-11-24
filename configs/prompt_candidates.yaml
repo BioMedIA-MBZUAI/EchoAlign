@@ -1,0 +1,434 @@
+# Candidate zero-shot prompts for EchoAlign. scripts/select_prompts.py picks each private finding's prompts
+# from these lists on the private validation split and writes configs/echoalign_prompts.yaml.
+#
+# findings   positive and negative candidate sentences per finding, in the order used to break ties. Each list
+#            holds hand-written clinical sentences worded to the task's positive boundary, then the template
+#            "<Finding> is present." or "No <finding>.". No sentence is taken from a patient report.
+#            A finding without private labels (cardiac_tamponade, lv_filling_pressure, lvot_obstruction,
+#            pericardial_effusion) takes its first three sentences per class, without selection.
+# reuse      task of another cohort -> finding whose prompts it takes (selected or, without private labels, fixed).
+# benchmark  CardioBench task -> positive and negative keys of `zero_shot_prompts` in
+#            benchmarks/CardioBench/src/prompts.py; the task takes those prompts unchanged.
+findings:
+  aortic_regurgitation:
+    positive:
+    - Moderate aortic regurgitation.
+    - Severe aortic regurgitation.
+    - Moderate to severe aortic regurgitation.
+    - There is a wide regurgitant jet across the aortic valve.
+    - Aortic regurgitation is present.
+    negative:
+    - No aortic regurgitation.
+    - Trace aortic regurgitation.
+    - Mild aortic regurgitation.
+    - The aortic valve is competent.
+  aortic_root_dilation:
+    positive:
+    - Dilated aortic root.
+    - Mild aortic root dilation.
+    - Severe aortic root dilation.
+    - Aortic root dilation is present.
+    negative:
+    - Normal aortic root dimension.
+    - The aortic root is not dilated.
+    - No aortic root dilation.
+  aortic_sclerosis:
+    positive:
+    - Aortic valve sclerosis.
+    - The aortic valve leaflets are thickened and sclerotic.
+    - Aortic valve sclerosis is present.
+    negative:
+    - Normal aortic valve.
+    - The aortic valve leaflets are thin and mobile.
+    - No aortic valve sclerosis.
+  aortic_stenosis_classification:
+    positive:
+    - Moderate aortic stenosis.
+    - Severe aortic stenosis.
+    - Moderate to severe aortic stenosis.
+    - The aortic valve is severely stenotic with a markedly reduced valve area.
+    - Aortic stenosis is present.
+    negative:
+    - No aortic stenosis.
+    - The aortic valve opens normally.
+    - Mild aortic stenosis.
+    - Aortic valve sclerosis without stenosis.
+  aortic_valve_replacement:
+    positive:
+    - A prosthetic aortic valve is present.
+    - Status post aortic valve replacement.
+    - A transcatheter aortic valve prosthesis is in place.
+    - Aortic valve replacement is present.
+    negative:
+    - Native aortic valve.
+    - No prosthetic aortic valve.
+    - No aortic valve replacement.
+  ascending_aorta_dilation:
+    positive:
+    - Dilated ascending aorta.
+    - Aneurysmal dilation of the ascending aorta.
+    - Ascending aorta dilation is present.
+    negative:
+    - Normal ascending aorta.
+    - The ascending aorta is not dilated.
+    - No ascending aorta dilation.
+  atrial_fibrillation:
+    positive:
+    - Atrial fibrillation.
+    - The rhythm is atrial fibrillation with irregularly irregular cycle lengths.
+    - Atrial fibrillation is present.
+    negative:
+    - Normal sinus rhythm.
+    - The rhythm is regular.
+    - No atrial fibrillation.
+  av_leaflet_degeneration:
+    positive:
+    - Degenerative changes of the aortic valve leaflets.
+    - The aortic valve leaflets are thickened and calcified.
+    - Aortic valve leaflet degeneration is present.
+    negative:
+    - The aortic valve leaflets appear normal.
+    - The aortic valve leaflets are thin and pliable.
+    - No aortic valve leaflet degeneration.
+  bicuspid_av:
+    positive:
+    - Bicuspid aortic valve.
+    - The aortic valve has two leaflets.
+    - Unicuspid aortic valve.
+    - Bicuspid aortic valve is present.
+    negative:
+    - Trileaflet aortic valve.
+    - The aortic valve has three leaflets.
+    - No bicuspid aortic valve.
+  elevated_ra_pressure:
+    positive:
+    - Elevated right atrial pressure.
+    - Significantly elevated right atrial pressure.
+    - The inferior vena cava is dilated without respiratory collapse.
+    - Elevated right atrial pressure is present.
+    negative:
+    - Normal right atrial pressure.
+    - The inferior vena cava collapses normally with inspiration.
+    - No elevated right atrial pressure.
+  heart_failure:
+    positive:
+    - Findings consistent with heart failure.
+    - Congestive heart failure.
+    - Heart failure is present.
+    negative:
+    - No evidence of heart failure.
+    - Normal cardiac function.
+    - No heart failure.
+  ivc_dilation:
+    positive:
+    - Dilated inferior vena cava.
+    - The inferior vena cava is dilated.
+    - Inferior vena cava dilation is present.
+    negative:
+    - Normal inferior vena cava.
+    - The inferior vena cava is of normal caliber.
+    - No inferior vena cava dilation.
+  la_enlargement:
+    positive:
+    - Moderate left atrial enlargement.
+    - Severe left atrial enlargement.
+    - The left atrium is severely dilated.
+    - Left atrial enlargement is present.
+    negative:
+    - Normal left atrial size.
+    - Mild left atrial enlargement.
+    - The left atrium is not significantly dilated.
+    - No left atrial enlargement.
+  lv_diastolic_dysfunction:
+    positive:
+    - Left ventricular diastolic dysfunction.
+    - Grade I diastolic dysfunction with impaired relaxation.
+    - Grade II diastolic dysfunction with a pseudonormal filling pattern.
+    - Grade III diastolic dysfunction with a restrictive filling pattern.
+    - Left ventricular diastolic dysfunction is present.
+    negative:
+    - Normal left ventricular diastolic function.
+    - Normal diastolic filling pattern.
+    - No left ventricular diastolic dysfunction.
+  lv_enlargement:
+    positive:
+    - Moderate left ventricular enlargement.
+    - Severe left ventricular enlargement.
+    - The left ventricular cavity is severely dilated.
+    - Left ventricular enlargement is present.
+    negative:
+    - Normal left ventricular size.
+    - Mild left ventricular enlargement.
+    - The left ventricular cavity is not significantly dilated.
+    - No left ventricular enlargement.
+  lv_systolic_dysfunction:
+    positive:
+    - Reduced left ventricular systolic function.
+    - Mildly reduced left ventricular systolic function.
+    - Severely reduced left ventricular systolic function.
+    - The left ventricular ejection fraction is depressed.
+    - Left ventricular systolic dysfunction is present.
+    negative:
+    - Normal left ventricular systolic function.
+    - The left ventricle contracts vigorously.
+    - Normal ejection fraction.
+    - No left ventricular systolic dysfunction.
+  lvh:
+    positive:
+    - Moderate left ventricular hypertrophy.
+    - Severe left ventricular hypertrophy.
+    - There is marked thickening of the left ventricular walls.
+    - Left ventricular hypertrophy is present.
+    negative:
+    - Normal left ventricular wall thickness.
+    - Mild left ventricular hypertrophy.
+    - Borderline left ventricular wall thickness.
+    - No left ventricular hypertrophy.
+  mitraclip:
+    positive:
+    - A mitral clip is present on the mitral valve.
+    - Status post mitral valve intervention.
+    - A prosthetic mitral valve is present.
+    - Mitral valve intervention is present.
+    negative:
+    - Native mitral valve.
+    - There is no clip or prosthesis on the mitral valve.
+    - No mitral valve intervention.
+  mitral_calcification:
+    positive:
+    - Mitral annular calcification.
+    - Mild mitral annular calcification.
+    - Severe mitral annular calcification.
+    - Mitral annular calcification is present.
+    negative:
+    - The mitral annulus is not calcified.
+    - Normal mitral annulus.
+    - No mitral annular calcification.
+  mitral_regurgitation_classification:
+    positive:
+    - Moderate mitral regurgitation.
+    - Severe mitral regurgitation.
+    - Moderate to severe mitral regurgitation.
+    - There is a large regurgitant jet across the mitral valve.
+    - Mitral regurgitation is present.
+    negative:
+    - No mitral regurgitation.
+    - Trace mitral regurgitation.
+    - Mild mitral regurgitation.
+    - The mitral valve is competent.
+  mitral_stenosis:
+    positive:
+    - Mitral stenosis.
+    - Mild mitral stenosis.
+    - Severe mitral stenosis with a reduced mitral valve area.
+    - Mitral stenosis is present.
+    negative:
+    - The mitral valve opens normally.
+    - Normal mitral valve inflow gradient.
+    - No mitral stenosis.
+  mitral_valve_prolapse:
+    positive:
+    - Mitral valve prolapse.
+    - There is systolic displacement of the mitral leaflet into the left atrium.
+    - Mitral valve prolapse is present.
+    negative:
+    - The mitral leaflets coapt normally.
+    - Normal mitral leaflet motion.
+    - No mitral valve prolapse.
+  mitral_valve_thickening:
+    positive:
+    - Thickened mitral valve leaflets.
+    - The mitral valve leaflets are thickened.
+    - Mitral valve thickening is present.
+    negative:
+    - The mitral valve leaflets are thin.
+    - Normal mitral valve leaflets.
+    - No mitral valve thickening.
+  pacemaker:
+    positive:
+    - A pacemaker lead is present in the right heart.
+    - An intracardiac device lead is visualized.
+    - Pacemaker lead is present.
+    negative:
+    - No intracardiac device is present.
+    - No device lead is seen in the right heart.
+    - No pacemaker lead.
+  pericardial_fat_pad:
+    positive:
+    - An anterior echolucent space consistent with a fat pad.
+    - Epicardial fat anterior to the right ventricle.
+    - Pericardial fat pad is present.
+    negative:
+    - No anterior echolucent space.
+    - The pericardium appears normal.
+    - No pericardial fat pad.
+  pulmonary_hypertension:
+    positive:
+    - Moderate pulmonary hypertension.
+    - Severe pulmonary hypertension.
+    - The pulmonary artery systolic pressure is markedly elevated.
+    - Pulmonary hypertension is present.
+    negative:
+    - Normal pulmonary artery pressure.
+    - Mild pulmonary hypertension.
+    - Borderline pulmonary artery pressure.
+    - No pulmonary hypertension.
+  pulmonic_regurgitation:
+    positive:
+    - Pulmonic regurgitation.
+    - There is regurgitant flow across the pulmonic valve.
+    - Pulmonic regurgitation is present.
+    negative:
+    - The pulmonic valve is competent.
+    - No regurgitant flow across the pulmonic valve.
+    - No pulmonic regurgitation.
+  ra_enlargement:
+    positive:
+    - Moderate right atrial enlargement.
+    - Severe right atrial enlargement.
+    - The right atrium is severely dilated.
+    - Right atrial enlargement is present.
+    negative:
+    - Normal right atrial size.
+    - Mild right atrial enlargement.
+    - The right atrium is not significantly dilated.
+    - No right atrial enlargement.
+  rv_enlargement:
+    positive:
+    - Moderate right ventricular enlargement.
+    - Severe right ventricular enlargement.
+    - The right ventricle is severely dilated.
+    - Right ventricular enlargement is present.
+    negative:
+    - Normal right ventricular size.
+    - Mild right ventricular enlargement.
+    - The right ventricle is not significantly dilated.
+    - No right ventricular enlargement.
+  rv_systolic_dysfunction:
+    positive:
+    - Reduced right ventricular systolic function.
+    - Mildly reduced right ventricular systolic function.
+    - Severely reduced right ventricular systolic function.
+    - Right ventricular systolic dysfunction is present.
+    negative:
+    - Normal right ventricular systolic function.
+    - The right ventricle contracts normally.
+    - No right ventricular systolic dysfunction.
+  rwma:
+    positive:
+    - Regional wall motion abnormality.
+    - There is hypokinesis of the left ventricular wall.
+    - Akinesis of the left ventricular apex.
+    - Regional wall motion abnormality is present.
+    negative:
+    - The left ventricle contracts uniformly.
+    - Normal regional left ventricular wall motion.
+    - No regional wall motion abnormality.
+  septal_motion_abnormality:
+    positive:
+    - Abnormal interventricular septal motion.
+    - Paradoxical septal motion.
+    - Septal motion abnormality is present.
+    negative:
+    - Normal interventricular septal motion.
+    - The interventricular septum moves normally.
+    - No septal motion abnormality.
+  study_quality:
+    positive:
+    - This is a technically difficult study.
+    - Image quality is suboptimal and limits interpretation.
+    - Technically difficult study is present.
+    negative:
+    - Image quality is adequate.
+    - This is a technically adequate study.
+    - No technically difficult study.
+  tricuspid_regurgitation_classification:
+    positive:
+    - Moderate tricuspid regurgitation.
+    - Severe tricuspid regurgitation.
+    - Moderate to severe tricuspid regurgitation.
+    - There is a large regurgitant jet across the tricuspid valve.
+    - Tricuspid regurgitation is present.
+    negative:
+    - No tricuspid regurgitation.
+    - Trace tricuspid regurgitation.
+    - Mild tricuspid regurgitation.
+    - The tricuspid valve is competent.
+  cardiac_tamponade:
+    positive:
+    - Cardiac tamponade.
+    - A large pericardial effusion with tamponade physiology and chamber collapse.
+    - Cardiac tamponade is present.
+    negative:
+    - No evidence of tamponade.
+    - No pericardial effusion.
+    - No cardiac tamponade.
+  lv_filling_pressure:
+    positive:
+    - Elevated left ventricular filling pressure.
+    - The left ventricular filling pressure is increased.
+    - Elevated left ventricular filling pressure is present.
+    negative:
+    - Normal left ventricular filling pressure.
+    - The left ventricular filling pressure is not increased.
+    - No elevated left ventricular filling pressure.
+  lvot_obstruction:
+    positive:
+    - Left ventricular outflow tract obstruction.
+    - There is a dynamic gradient in the left ventricular outflow tract.
+    - Left ventricular outflow tract obstruction is present.
+    negative:
+    - The left ventricular outflow tract is unobstructed.
+    - There is no gradient in the left ventricular outflow tract.
+    - No left ventricular outflow tract obstruction.
+  pericardial_effusion:
+    positive:
+    - Moderate pericardial effusion.
+    - Large pericardial effusion.
+    - Large circumferential pericardial effusion with tamponade physiology.
+    - There is a substantial rim of pericardial fluid.
+    - Pericardial effusion is present.
+    negative:
+    - No pericardial effusion.
+    - Trace pericardial effusion.
+    - Small pericardial effusion.
+    - The pericardium is normal.
+reuse:
+  mimic_iv_echo:
+    aortic_regurgitation: aortic_regurgitation
+    aortic_root_dilation: aortic_root_dilation
+    aortic_stenosis: aortic_stenosis_classification
+    aortic_valve_replacement: aortic_valve_replacement
+    ascending_aorta_dilation: ascending_aorta_dilation
+    av_leaflet_degeneration: av_leaflet_degeneration
+    ivc_dilation: ivc_dilation
+    la_enlargement: la_enlargement
+    lv_diastolic_dysfunction: lv_diastolic_dysfunction
+    lv_enlargement: lv_enlargement
+    lv_systolic_dysfunction: lv_systolic_dysfunction
+    lvh: lvh
+    mitral_regurgitation: mitral_regurgitation_classification
+    mitral_stenosis: mitral_stenosis
+    mitral_valve_device: mitraclip
+    mitral_valve_prolapse: mitral_valve_prolapse
+    mitral_valve_thickening: mitral_valve_thickening
+    pulmonary_hypertension: pulmonary_hypertension
+    pulmonic_regurgitation: pulmonic_regurgitation
+    ra_enlargement: ra_enlargement
+    rv_enlargement: rv_enlargement
+    rv_overload_septal_motion: septal_motion_abnormality
+    rv_systolic_dysfunction: rv_systolic_dysfunction
+    technically_difficult_study: study_quality
+    tricuspid_regurgitation: tricuspid_regurgitation_classification
+    cardiac_tamponade: cardiac_tamponade
+    lv_filling_pressure: lv_filling_pressure
+    lvot_obstruction: lvot_obstruction
+    pericardial_effusion: pericardial_effusion
+  cardiobench:
+    aortic_stenosis_tmed2_public: aortic_stenosis_classification
+    pah_cardiacnet_public: pulmonary_hypertension
+    rwma_public: rwma
+    stemi_hmc_qu_public: rwma
+benchmark:
+  cardiobench:
+    asd_cardiacnet_public: {positive: asd_present, negative: asd_absent}

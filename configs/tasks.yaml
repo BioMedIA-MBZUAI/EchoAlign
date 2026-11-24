@@ -1,0 +1,1201 @@
+# Task metadata for the figures and the Extended Data tables.
+#
+# groups      anatomical groups in paper order, with their colour; short = heading used where space is tight
+# sectors     Fig. 1b sectors in clockwise order
+# targets     one entry per clinical target (one table row, one Fig. 1b spoke), in paper order
+#   mode          classification | regression | ordinal (graded only)
+#   group         anatomical group; sector: Fig. 1b sector
+#   name          full name; short_name: Fig. 1b and caption name; figure_name: ED figure row; table_name: row under
+#                 the group heading in the Extended Data tables (ordinal_table_name overrides it in the QWK table)
+#   positive      positive definition (classification); unit: label unit (regression)
+#   tasks         task id per cohort (cohorts as in configs/cohorts.yaml); cardiobench lists every benchmark task
+#   ordinal       ordinal task id per cohort; graded_from_trace: cohorts whose grades start at trace
+#   binary        raw label values the private binary task counts positive or negative; MIMIC-IV-Echo value sets
+#                 are in scripts/make_mimic_labels.py
+# cardiobench_datasets  count unit of each dataset in ED Fig. 1a, and how its tasks combine (max or sum)
+# cardiobench           one entry per CardioBench task
+groups:
+- name: Left ventricle
+  colour: '#B8322A'
+- name: Atria
+  colour: '#E0735A'
+- name: Right ventricle
+  colour: '#2C5F9E'
+- name: Aortic valve
+  colour: '#B7791F'
+- name: Mitral valve
+  colour: '#DDAA3C'
+- name: Tricuspid and pulmonic valves
+  colour: '#2F8062'
+- name: Aorta and pulmonary circulation
+  colour: '#5E3A96'
+- name: Pericardium and inferior vena cava
+  colour: '#7C7A72'
+  short: Pericardium and IVC
+- name: Devices and acquisition
+  colour: '#55544f'
+- name: Left atrium and mitral valve
+  colour: '#E0735A'
+- name: Right ventricle and pulmonary circulation
+  colour: '#2C5F9E'
+- name: Aorta and aortic valve
+  colour: '#B7791F'
+sectors:
+- name: LV
+  colour: '#B8322A'
+- name: MV
+  colour: '#DDAA3C'
+- name: Atria
+  colour: '#E0735A'
+- name: TV/PV
+  colour: '#2F8062'
+- name: RV/PA
+  colour: '#2C5F9E'
+- name: AV
+  colour: '#B7791F'
+- name: Aorta
+  colour: '#5E3A96'
+- name: Peri/IVC
+  colour: '#7C7A72'
+- name: Devices
+  colour: '#55544f'
+targets:
+  lv_enlargement:
+    mode: classification
+    group: Left ventricle
+    name: Left ventricular enlargement
+    short_name: LV enlargement
+    figure_name: LV enlargement
+    table_name: Enlargement
+    positive: ≥ moderate, or ungraded
+    sector: LV
+    tasks:
+      private: lv_enlargement
+      mimic_iv_echo: lv_enlargement
+    binary:
+      private:
+        positive:
+        - moderate_enlargement
+        - severe_enlargement
+        - enlargement
+        negative:
+        - normal
+        - mild_enlargement
+    ordinal:
+      private: lv_enlargement_grade
+      mimic_iv_echo: lv_enlargement_grade
+  lvh:
+    mode: classification
+    group: Left ventricle
+    name: Left ventricular hypertrophy
+    short_name: LV hypertrophy
+    figure_name: LV hypertrophy
+    table_name: Hypertrophy
+    positive: ≥ moderate
+    sector: LV
+    tasks:
+      private: lvh
+      mimic_iv_echo: lvh
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        negative:
+        - normal
+        - borderline
+        - mild
+    ordinal:
+      private: lvh_grade
+      mimic_iv_echo: lvh_grade
+  lv_systolic_dysfunction:
+    mode: classification
+    group: Left ventricle
+    name: Left ventricular systolic dysfunction
+    short_name: LV systolic dysfunction
+    figure_name: LV systolic dysfunction
+    table_name: Systolic dysfunction
+    positive: ≥ mildly reduced
+    sector: LV
+    tasks:
+      private: lv_systolic_dysfunction
+      mimic_iv_echo: lv_systolic_dysfunction
+    binary:
+      private:
+        positive:
+        - mildly_reduced
+        - moderately_reduced
+        - reduced
+        - severely_reduced
+        negative:
+        - normal
+    ordinal:
+      private: lv_systolic_dysfunction_grade
+      mimic_iv_echo: lv_systolic_dysfunction_grade
+  lv_ef_category:
+    mode: ordinal
+    group: Left ventricle
+    name: Ejection fraction category
+    short_name: Ejection fraction category
+    figure_name: Ejection fraction category
+    table_name: Ejection fraction category
+    sector: LV
+    tasks: {}
+    ordinal:
+      mimic_iv_echo: lv_ef_band_grade
+  lv_diastolic_dysfunction:
+    mode: classification
+    group: Left ventricle
+    name: Left ventricular diastolic dysfunction
+    short_name: LV diastolic dysfunction
+    figure_name: LV diastolic dysfunction
+    table_name: Diastolic dysfunction
+    positive: ≥ grade I, or ungraded
+    sector: LV
+    tasks:
+      private: lv_diastolic_dysfunction
+      mimic_iv_echo: lv_diastolic_dysfunction
+    binary:
+      private:
+        positive:
+        - diastolic_dysfunction
+        - grade_i
+        - grade_ii
+        - grade_iii
+        negative:
+        - normal
+    ordinal:
+      private: lv_diastolic_dysfunction_grade
+      mimic_iv_echo: lv_diastolic_dysfunction_grade
+  elevated_lv_filling_pressure:
+    mode: classification
+    group: Left ventricle
+    name: Elevated left ventricular filling-pressure category
+    short_name: Elevated LV filling-pressure category
+    figure_name: Elevated LV filling pressure
+    table_name: Elevated filling pressure
+    positive: E/e′ > 14; PCWP > 18 mmHg
+    sector: LV
+    tasks:
+      mimic_iv_echo: lv_filling_pressure
+  rwma:
+    mode: classification
+    group: Left ventricle
+    name: Regional wall-motion abnormality
+    short_name: Regional wall-motion abnormality
+    figure_name: Regional wall-motion abnormality
+    table_name: Regional wall-motion abnormality
+    positive: Present
+    sector: LV
+    tasks:
+      private: rwma
+      cardiobench:
+      - rwma_public
+      - stemi_hmc_qu_public
+    binary:
+      private:
+        positive:
+        - rwma
+        negative:
+        - no_rwma
+  septal_motion_abnormality:
+    mode: classification
+    group: Left ventricle
+    name: Septal motion abnormality
+    short_name: Septal motion abnormality
+    figure_name: Septal motion abnormality
+    table_name: Septal motion abnormality
+    positive: Present
+    sector: LV
+    tasks:
+      private: septal_motion_abnormality
+    binary:
+      private:
+        positive:
+        - septal_motion_abnormality
+        negative:
+        - no_septal_motion_abnormality
+  lv_gradient_or_subaortic_membrane:
+    mode: classification
+    group: Left ventricle
+    name: Left ventricular outflow or intracavitary gradient, or subaortic membrane
+    short_name: LV gradient or subaortic membrane
+    figure_name: LV gradient or subaortic membr.
+    table_name: Gradient or subaortic membrane
+    positive: Outflow or intracavitary gradient, or subaortic membrane
+    sector: LV
+    tasks:
+      mimic_iv_echo: lvot_obstruction
+  heart_failure_cardiomyopathy_systolic_dysfunction:
+    mode: classification
+    group: Left ventricle
+    name: Heart failure, cardiomyopathy or systolic dysfunction
+    short_name: HF, cardiomyopathy or systolic dysfunction
+    figure_name: Heart-failure composite
+    table_name: Heart-failure composite
+    positive: Heart failure, cardiomyopathy or systolic dysfunction
+    sector: LV
+    tasks:
+      private: heart_failure
+    binary:
+      private:
+        positive:
+        - heart_failure
+        negative:
+        - normal
+  rv_enlargement:
+    mode: classification
+    group: Right ventricle
+    name: Right ventricular enlargement
+    short_name: RV enlargement
+    figure_name: RV enlargement
+    table_name: Enlargement
+    positive: ≥ moderate, or ungraded
+    sector: RV/PA
+    tasks:
+      private: rv_enlargement
+      mimic_iv_echo: rv_enlargement
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - enlarged
+        negative:
+        - normal
+        - mild
+    ordinal:
+      mimic_iv_echo: rv_enlargement_grade
+  rv_systolic_dysfunction:
+    mode: classification
+    group: Right ventricle
+    name: Right ventricular systolic dysfunction
+    short_name: RV systolic dysfunction
+    figure_name: RV systolic dysfunction
+    table_name: Systolic dysfunction
+    positive: ≥ mildly reduced
+    sector: RV/PA
+    tasks:
+      private: rv_systolic_dysfunction
+      mimic_iv_echo: rv_systolic_dysfunction
+    binary:
+      private:
+        positive:
+        - mildly_reduced
+        - moderately_reduced
+        - reduced
+        - severely_reduced
+        negative:
+        - normal
+    ordinal:
+      mimic_iv_echo: rv_systolic_dysfunction_grade
+  rv_overload_septal_motion:
+    mode: classification
+    group: Right ventricle
+    name: Right ventricular overload pattern of septal motion
+    short_name: RV overload pattern of septal motion
+    figure_name: RV overload septal motion
+    table_name: Overload pattern of septal motion
+    positive: Pressure or volume overload
+    sector: RV/PA
+    tasks:
+      mimic_iv_echo: rv_overload_septal_motion
+  la_enlargement:
+    mode: classification
+    group: Atria
+    name: Left atrial enlargement
+    short_name: LA enlargement
+    figure_name: LA enlargement
+    table_name: Left atrial enlargement
+    positive: ≥ moderate, or ungraded
+    sector: Atria
+    tasks:
+      private: la_enlargement
+      mimic_iv_echo: la_enlargement
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - enlarged
+        negative:
+        - normal
+        - mild
+    ordinal:
+      private: la_enlargement_grade
+      mimic_iv_echo: la_enlargement_grade
+  ra_enlargement:
+    mode: classification
+    group: Atria
+    name: Right atrial enlargement
+    short_name: RA enlargement
+    figure_name: RA enlargement
+    table_name: Right atrial enlargement
+    positive: ≥ moderate, or ungraded
+    sector: Atria
+    tasks:
+      private: ra_enlargement
+      mimic_iv_echo: ra_enlargement
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - enlarged
+        negative:
+        - normal
+        - mild
+    ordinal:
+      mimic_iv_echo: ra_enlargement_grade
+  elevated_ra_pressure:
+    mode: classification
+    group: Atria
+    name: Elevated estimated right atrial pressure
+    short_name: Elevated estimated RA pressure
+    figure_name: Elevated estimated RA pressure
+    table_name: Elevated estimated right atrial pressure
+    positive: Elevated
+    sector: Atria
+    tasks:
+      private: elevated_ra_pressure
+    binary:
+      private:
+        positive:
+        - elevated
+        - significantly_elevated
+        negative:
+        - normal
+  atrial_fibrillation_or_flutter:
+    mode: classification
+    group: Atria
+    name: Atrial fibrillation or flutter
+    short_name: Atrial fibrillation or flutter
+    figure_name: Atrial fibrillation or flutter
+    table_name: Atrial fibrillation or flutter
+    positive: Fibrillation or flutter
+    sector: Atria
+    tasks:
+      private: atrial_fibrillation
+    binary:
+      private:
+        positive:
+        - atrial_fibrillation
+        negative:
+        - no_atrial_fibrillation
+  atrial_septal_defect:
+    mode: classification
+    group: Atria
+    name: Atrial septal defect
+    short_name: Atrial septal defect
+    figure_name: Atrial septal defect
+    table_name: Atrial septal defect
+    sector: Atria
+    tasks:
+      cardiobench:
+      - asd_cardiacnet_public
+  aortic_regurgitation:
+    mode: classification
+    group: Aortic valve
+    name: Aortic regurgitation
+    short_name: Aortic regurgitation
+    figure_name: Aortic regurgitation
+    table_name: Regurgitation
+    positive: ≥ moderate
+    sector: AV
+    tasks:
+      private: aortic_regurgitation
+      mimic_iv_echo: aortic_regurgitation
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - moderate_to_severe
+        negative:
+        - normal
+        - trace
+        - mild
+        - mild_to_moderate
+    ordinal:
+      private: aortic_regurgitation_grade
+      mimic_iv_echo: aortic_regurgitation_nonone_grade
+    graded_from_trace:
+    - mimic_iv_echo
+  aortic_stenosis_classification:
+    mode: classification
+    group: Aortic valve
+    name: Aortic stenosis
+    short_name: Aortic stenosis
+    figure_name: Aortic stenosis
+    table_name: Stenosis
+    positive: ≥ moderate
+    sector: AV
+    tasks:
+      private: aortic_stenosis_classification
+      mimic_iv_echo: aortic_stenosis
+      cardiobench:
+      - aortic_stenosis_tmed2_public
+    binary:
+      private:
+        positive:
+        - Moderate
+        - Severe
+        - moderate_to_severe
+        negative:
+        - Normal
+        - Mild
+        - mild_to_moderate
+    ordinal:
+      private: aortic_stenosis_grade
+      mimic_iv_echo: aortic_stenosis_grade
+  aortic_sclerosis:
+    mode: classification
+    group: Aortic valve
+    name: Aortic valve sclerosis
+    short_name: Aortic valve sclerosis
+    figure_name: Aortic valve sclerosis
+    table_name: Sclerosis
+    positive: Present
+    sector: AV
+    tasks:
+      private: aortic_sclerosis
+    binary:
+      private:
+        positive:
+        - aortic_sclerosis
+        - minimal
+        - mild
+        - moderate
+        - severe
+        negative:
+        - normal
+  aortic_leaflet_structural_changes:
+    mode: classification
+    group: Aortic valve
+    name: Aortic leaflet thickening, sclerosis or calcification
+    short_name: Aortic leaflet thickening, sclerosis or calcification
+    figure_name: Aortic leaflet thickening
+    table_name: Leaflet thickening, sclerosis or calcification
+    positive: Any of the three
+    sector: AV
+    tasks:
+      private: av_leaflet_degeneration
+      mimic_iv_echo: av_leaflet_degeneration
+    binary:
+      private:
+        positive:
+        - av_leaflet_degeneration
+        negative:
+        - no_av_leaflet_degeneration
+    ordinal:
+      mimic_iv_echo: av_leaflet_thickening_grade
+    ordinal_table_name: Leaflet thickening
+  non_trileaflet_aortic_valve:
+    mode: classification
+    group: Aortic valve
+    name: Non-trileaflet aortic valve morphology
+    short_name: Non-trileaflet aortic valve
+    figure_name: Non-trileaflet aortic valve
+    table_name: Non-trileaflet valve
+    positive: Bicuspid, unicuspid or quadricuspid
+    sector: AV
+    tasks:
+      private: bicuspid_av
+    binary:
+      private:
+        positive:
+        - bicuspid
+        - unicuspid
+        - quadricuspid
+        negative:
+        - trileaflet
+  aortic_valve_replacement_markers:
+    mode: classification
+    group: Aortic valve
+    name: Aortic valve replacement markers
+    short_name: Aortic valve replacement markers
+    figure_name: Aortic valve replacement markers
+    table_name: Valve replacement
+    positive: Prosthesis or procedure markers
+    sector: AV
+    tasks:
+      private: aortic_valve_replacement
+      mimic_iv_echo: aortic_valve_replacement
+    binary:
+      private:
+        positive:
+        - av_surgery_present
+        negative:
+        - no_replacement
+  mitral_regurgitation_classification:
+    mode: classification
+    group: Mitral valve
+    name: Mitral regurgitation
+    short_name: Mitral regurgitation
+    figure_name: Mitral regurgitation
+    table_name: Regurgitation
+    positive: ≥ moderate
+    sector: MV
+    tasks:
+      private: mitral_regurgitation_classification
+      mimic_iv_echo: mitral_regurgitation
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - moderate_to_severe
+        negative:
+        - normal
+        - trace
+        - mild
+        - mild_to_moderate
+    ordinal:
+      private: mitral_regurgitation_grade
+      mimic_iv_echo: mitral_regurgitation_nonone_grade
+    graded_from_trace:
+    - mimic_iv_echo
+  mitral_stenosis:
+    mode: classification
+    group: Mitral valve
+    name: Mitral stenosis
+    short_name: Mitral stenosis
+    figure_name: Mitral stenosis
+    table_name: Stenosis
+    positive: ≥ mild, or ungraded
+    sector: MV
+    tasks:
+      private: mitral_stenosis
+      mimic_iv_echo: mitral_stenosis
+    binary:
+      private:
+        positive:
+        - ms_mild
+        - ms_moderate
+        - ms_present_unspecified
+        - ms_severe
+        negative:
+        - no_mitral_stenosis
+  mitral_calcification:
+    mode: classification
+    group: Mitral valve
+    name: Mitral annular calcification
+    short_name: Mitral annular calcification
+    figure_name: Mitral annular calcification
+    table_name: Annular calcification
+    positive: Present, including ungraded
+    sector: MV
+    tasks:
+      private: mitral_calcification
+    binary:
+      private:
+        positive:
+        - mac_mild
+        - mac_moderate
+        - mac_present_unspecified
+        - mac_severe
+        negative:
+        - no_mitral_calcification
+    ordinal:
+      private: mitral_calcification_grade
+      mimic_iv_echo: mitral_annular_calcification_nonone_grade
+    graded_from_trace:
+    - mimic_iv_echo
+  mitral_leaflet_motion_or_myxomatous_abnormality:
+    mode: classification
+    group: Mitral valve
+    name: Mitral leaflet motion or myxomatous abnormality
+    short_name: Mitral leaflet motion or myxomatous abnormality
+    figure_name: Mitral leaflet motion
+    table_name: Leaflet motion or myxomatous abnormality
+    positive: Either abnormality
+    sector: MV
+    tasks:
+      private: mitral_valve_prolapse
+      mimic_iv_echo: mitral_valve_prolapse
+    binary:
+      private:
+        positive:
+        - mitral_valve_prolapse
+        negative:
+        - no_mitral_valve_prolapse
+    ordinal:
+      mimic_iv_echo: mitral_valve_prolapse_grade
+  mitral_leaflet_thickening_or_myxomatous_change:
+    mode: classification
+    group: Mitral valve
+    name: Mitral leaflet thickening or myxomatous change
+    short_name: Mitral leaflet thickening or myxomatous change
+    figure_name: Mitral leaflet thickening
+    table_name: Leaflet thickening or myxomatous change
+    positive: Either change
+    sector: MV
+    tasks:
+      private: mitral_valve_thickening
+      mimic_iv_echo: mitral_valve_thickening
+    binary:
+      private:
+        positive:
+        - mitral_valve_thickening
+        negative:
+        - no_mitral_valve_thickening
+    ordinal:
+      mimic_iv_echo: mitral_valve_thickening_grade
+  mitral_valve_repair_or_prosthesis:
+    mode: classification
+    group: Mitral valve
+    name: Mitral valve repair or prosthesis
+    short_name: Mitral valve repair or prosthesis
+    figure_name: Mitral valve repair or prosthesis
+    table_name: Repair or prosthesis
+    positive: Repair or prosthesis markers
+    sector: MV
+    tasks:
+      private: mitraclip
+      mimic_iv_echo: mitral_valve_device
+    binary:
+      private:
+        positive:
+        - mitral_intervention_present
+        negative:
+        - no_mitral_intervention
+  tricuspid_regurgitation_classification:
+    mode: classification
+    group: Tricuspid and pulmonic valves
+    name: Tricuspid regurgitation
+    short_name: Tricuspid regurgitation
+    figure_name: Tricuspid regurgitation
+    table_name: Tricuspid regurgitation
+    positive: ≥ moderate
+    sector: TV/PV
+    tasks:
+      private: tricuspid_regurgitation_classification
+      mimic_iv_echo: tricuspid_regurgitation
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - moderate_to_severe
+        negative:
+        - normal
+        - trace
+        - mild
+        - mild_to_moderate
+    ordinal:
+      private: tricuspid_regurgitation_grade
+      mimic_iv_echo: tricuspid_regurgitation_nonone_grade
+    graded_from_trace:
+    - mimic_iv_echo
+  pulmonic_regurgitation:
+    mode: classification
+    group: Tricuspid and pulmonic valves
+    name: Pulmonic regurgitation
+    short_name: Pulmonic regurgitation
+    figure_name: Pulmonic regurgitation
+    table_name: Pulmonic regurgitation
+    positive: ≥ mild
+    sector: TV/PV
+    tasks:
+      private: pulmonic_regurgitation
+      mimic_iv_echo: pulmonic_regurgitation
+    binary:
+      private:
+        positive:
+        - pulmonic_regurgitation
+        negative:
+        - no_pulmonic_regurgitation
+  aortic_root_dilation:
+    mode: classification
+    group: Aorta and pulmonary circulation
+    name: Aortic root dilation
+    short_name: Aortic root dilation
+    figure_name: Aortic root dilation
+    table_name: Aortic root dilation
+    positive: ≥ mild, or ungraded
+    sector: Aorta
+    tasks:
+      private: aortic_root_dilation
+      mimic_iv_echo: aortic_root_dilation
+    binary:
+      private:
+        positive:
+        - mild
+        - moderate
+        - severe
+        - dilated
+        negative:
+        - normal
+        - borderline
+    ordinal:
+      mimic_iv_echo: aortic_root_dilation_grade
+  ascending_aorta_dilation:
+    mode: classification
+    group: Aorta and pulmonary circulation
+    name: Ascending aortic dilation
+    short_name: Ascending aortic dilation
+    figure_name: Ascending aortic dilation
+    table_name: Ascending aortic dilation
+    positive: Present
+    sector: Aorta
+    tasks:
+      private: ascending_aorta_dilation
+      mimic_iv_echo: ascending_aorta_dilation
+    binary:
+      private:
+        positive:
+        - ascending_aorta_dilation
+        negative:
+        - no_ascending_aorta_dilation
+  pulmonary_hypertension_family:
+    mode: classification
+    group: Aorta and pulmonary circulation
+    name: Echocardiographic pulmonary hypertension category
+    short_name: Echocardiographic PH category
+    figure_name: Pulmonary hypertension
+    table_name: Pulmonary hypertension
+    positive: ≥ moderate; private test set also ungraded elevated
+    sector: RV/PA
+    tasks:
+      private: pulmonary_hypertension
+      mimic_iv_echo: pulmonary_hypertension
+      cardiobench:
+      - pah_cardiacnet_public
+    binary:
+      private:
+        positive:
+        - moderate
+        - severe
+        - elevated
+        negative:
+        - normal
+        - borderline
+        - mild
+    ordinal:
+      private: pulmonary_hypertension_grade
+      mimic_iv_echo: pulmonary_hypertension_grade
+  pericardial_effusion:
+    mode: classification
+    group: Pericardium and inferior vena cava
+    name: Pericardial effusion
+    short_name: Pericardial effusion
+    figure_name: Pericardial effusion
+    table_name: Pericardial effusion
+    positive: ≥ moderate
+    sector: Peri/IVC
+    tasks:
+      mimic_iv_echo: pericardial_effusion
+    ordinal:
+      mimic_iv_echo: pericardial_effusion_nonone_grade
+    graded_from_trace:
+    - mimic_iv_echo
+  echocardiographic_tamponade_signs:
+    mode: classification
+    group: Pericardium and inferior vena cava
+    name: Echocardiographic signs of tamponade
+    short_name: Echocardiographic signs of tamponade
+    figure_name: Tamponade signs
+    table_name: Signs of tamponade
+    positive: Tamponade signs or physiology
+    sector: Peri/IVC
+    tasks:
+      mimic_iv_echo: cardiac_tamponade
+  pericardial_fat_pad:
+    mode: classification
+    group: Pericardium and inferior vena cava
+    name: Pericardial fat pad
+    short_name: Pericardial fat pad
+    figure_name: Pericardial fat pad
+    table_name: Pericardial fat pad
+    positive: Present
+    sector: Peri/IVC
+    tasks:
+      private: pericardial_fat_pad
+    binary:
+      private:
+        positive:
+        - pericardial_fat_pad
+        negative:
+        - no_pericardial_fat_pad
+  ivc_dilation:
+    mode: classification
+    group: Pericardium and inferior vena cava
+    name: Inferior vena cava dilation
+    short_name: IVC dilation
+    figure_name: IVC dilation
+    table_name: Inferior vena cava dilation
+    positive: Present
+    sector: Peri/IVC
+    tasks:
+      private: ivc_dilation
+      mimic_iv_echo: ivc_dilation
+    binary:
+      private:
+        positive:
+        - dilated
+        negative:
+        - normal
+  pacemaker_or_defibrillator_markers:
+    mode: classification
+    group: Devices and acquisition
+    name: Pacemaker or defibrillator markers
+    short_name: Pacemaker or defibrillator markers
+    figure_name: Pacemaker or defibrillator
+    table_name: Pacemaker or defibrillator
+    positive: Device, lead or pacing markers
+    sector: Devices
+    tasks:
+      private: pacemaker
+    binary:
+      private:
+        positive:
+        - pacemaker_present
+        negative:
+        - no_pacemaker
+  study_quality:
+    mode: classification
+    group: Devices and acquisition
+    name: Technically difficult study
+    short_name: Technically difficult study
+    figure_name: Technically difficult study
+    table_name: Technically difficult study
+    positive: Present
+    sector: Devices
+    tasks:
+      private: study_quality
+      mimic_iv_echo: technically_difficult_study
+    binary:
+      private:
+        positive:
+        - technically_difficult
+        negative:
+        - adequate
+  ejection_fraction:
+    mode: regression
+    group: Left ventricle
+    name: Left ventricular ejection fraction
+    short_name: LV ejection fraction
+    figure_name: LV ejection fraction
+    table_name: Ejection fraction
+    unit: '%'
+    sector: LV
+    tasks:
+      private: ejection_fraction
+      mimic_iv_echo: lvef
+      cardiobench:
+      - ejection_fraction_public
+      - ejection_fraction_camus_public
+      - ejection_fraction_pediatric_public
+  lvedd:
+    mode: regression
+    group: Left ventricle
+    name: Left ventricular end-diastolic internal diameter
+    short_name: LV end-diastolic internal diameter
+    figure_name: LV end-diastolic diameter
+    table_name: End-diastolic internal diameter
+    unit: cm
+    sector: LV
+    tasks:
+      mimic_iv_echo: lvedd
+      cardiobench:
+      - lvidd_lvh_public
+  lvesd:
+    mode: regression
+    group: Left ventricle
+    name: Left ventricular end-systolic internal diameter
+    short_name: LV end-systolic internal diameter
+    figure_name: LV end-systolic diameter
+    table_name: End-systolic internal diameter
+    unit: cm
+    sector: LV
+    tasks:
+      mimic_iv_echo: lvesd
+  rest_lvot:
+    mode: regression
+    group: Left ventricle
+    name: Resting left ventricular outflow tract pressure gradient
+    short_name: Resting LVOT pressure gradient
+    figure_name: Resting LVOT gradient
+    table_name: Resting outflow tract pressure gradient
+    unit: mm Hg
+    sector: LV
+    tasks:
+      mimic_iv_echo: rest_lvot
+  end_diastolic_interventricular_septal_thickness:
+    mode: regression
+    group: Left ventricle
+    name: Interventricular septal thickness
+    short_name: Interventricular septal thickness
+    figure_name: Septal thickness
+    table_name: Interventricular septal thickness
+    sector: LV
+    tasks:
+      cardiobench:
+      - ivsd_lvh_public
+    unit: cm
+  end_diastolic_lv_posterior_wall_thickness:
+    mode: regression
+    group: Left ventricle
+    name: LV posterior wall thickness
+    short_name: LV posterior wall thickness
+    figure_name: Posterior wall thickness
+    table_name: LV posterior wall thickness
+    sector: LV
+    tasks:
+      cardiobench:
+      - lvpwd_lvh_public
+    unit: cm
+  lavi:
+    mode: regression
+    group: Left atrium and mitral valve
+    name: Left atrial volume index
+    short_name: LA volume index
+    figure_name: LA volume index
+    table_name: Left atrial volume index
+    unit: ml/m²
+    sector: Atria
+    tasks:
+      private: lavi
+  la_vol:
+    mode: regression
+    group: Left atrium and mitral valve
+    name: Left atrial volume
+    short_name: LA volume
+    figure_name: LA volume
+    table_name: Left atrial volume
+    unit: ml
+    sector: Atria
+    tasks:
+      mimic_iv_echo: la_vol
+  mv_peak_e_a:
+    mode: regression
+    group: Left atrium and mitral valve
+    name: Mitral inflow E/A ratio
+    short_name: Mitral inflow E/A ratio
+    figure_name: Mitral inflow E/A ratio
+    table_name: Mitral inflow E/A ratio
+    unit: ratio (dimensionless)
+    sector: MV
+    tasks:
+      mimic_iv_echo: mv_peak_e_a
+  reported_pulmonary_artery_pressure:
+    mode: regression
+    group: Right ventricle and pulmonary circulation
+    name: Report-extracted pulmonary artery pressure
+    short_name: Report-extracted pulmonary artery pressure
+    figure_name: Pulmonary artery pressure
+    table_name: Pulmonary artery pressure
+    unit: mmHg
+    sector: RV/PA
+    tasks:
+      private: pa_pressure
+  rvsp:
+    mode: regression
+    group: Right ventricle and pulmonary circulation
+    name: Estimated right ventricular systolic pressure
+    short_name: Estimated RV systolic pressure
+    figure_name: RV systolic pressure
+    table_name: Estimated right ventricular systolic pressure
+    unit: mmHg
+    sector: RV/PA
+    tasks:
+      private: rvsp
+  tr_velocity:
+    mode: regression
+    group: Right ventricle and pulmonary circulation
+    name: Tricuspid regurgitation peak velocity
+    short_name: Tricuspid regurgitation peak velocity
+    figure_name: TR peak velocity
+    table_name: Tricuspid regurgitation peak velocity
+    unit: m/s
+    sector: RV/PA
+    tasks:
+      mimic_iv_echo: tr_velocity
+  tapse:
+    mode: regression
+    group: Right ventricle and pulmonary circulation
+    name: Tricuspid annular plane systolic excursion
+    short_name: TAPSE
+    figure_name: TAPSE
+    table_name: TAPSE
+    unit: cm
+    sector: RV/PA
+    tasks:
+      mimic_iv_echo: tapse
+  aortic_root_dimension:
+    mode: regression
+    group: Aorta and aortic valve
+    name: Aortic root diameter
+    short_name: Aortic root diameter
+    figure_name: Aortic root diameter
+    table_name: Aortic root diameter
+    unit: cm
+    sector: Aorta
+    tasks:
+      private: aortic_root_dimension
+      mimic_iv_echo: sinus_diam
+  transaortic_mean_gradient:
+    mode: regression
+    group: Aorta and aortic valve
+    name: Mean transaortic pressure gradient
+    short_name: Mean transaortic pressure gradient
+    figure_name: Mean transaortic gradient
+    table_name: Mean transaortic pressure gradient
+    unit: mmHg
+    sector: AV
+    tasks:
+      private: transaortic_mean_gradient
+      mimic_iv_echo: av_mean_grad
+  transaortic_peak_gradient:
+    mode: regression
+    group: Aorta and aortic valve
+    name: Peak transaortic pressure gradient
+    short_name: Peak transaortic pressure gradient
+    figure_name: Peak transaortic gradient
+    table_name: Peak transaortic pressure gradient
+    unit: mmHg
+    sector: AV
+    tasks:
+      private: transaortic_peak_gradient
+  transaortic_peak_velocity:
+    mode: regression
+    group: Aorta and aortic valve
+    name: Peak transaortic velocity
+    short_name: Peak transaortic velocity
+    figure_name: Peak transaortic velocity
+    table_name: Peak transaortic velocity
+    unit: m/s
+    sector: AV
+    tasks:
+      private: transaortic_peak_velocity
+      mimic_iv_echo: av_pk_vel
+cardiobench_datasets:
+  TMED-2:
+    count_unit: studies
+    combine: max
+  CardiacNet:
+    count_unit: cases
+    combine: sum
+  SegRWMA:
+    count_unit: patients
+    combine: max
+  HMC-QU:
+    count_unit: videos
+    combine: max
+  CAMUS:
+    count_unit: patients
+    combine: max
+  EchoNet-Pediatric:
+    count_unit: exams
+    combine: max
+  EchoNet-Dynamic:
+    count_unit: videos
+    combine: max
+  EchoNet-LVH:
+    count_unit: videos
+    combine: max
+cardiobench:
+  aortic_stenosis_tmed2_public:
+    target: aortic_stenosis_classification
+    mode: classification
+    dataset: TMED-2
+    citation: huang2022tmed
+    inputs: All images of one study
+    prediction_unit: study
+    table_name: Aortic stenosis
+    positive: ≥ moderate
+    figure_name: Aortic stenosis
+  asd_cardiacnet_public:
+    target: atrial_septal_defect
+    mode: classification
+    dataset: CardiacNet
+    citation: yang2024cardiacnet
+    inputs: One A4C video per case
+    prediction_unit: video
+    table_name: Atrial septal defect
+    positive: Source diagnosis
+    figure_name: Atrial septal defect
+  pah_cardiacnet_public:
+    target: pulmonary_hypertension_family
+    mode: classification
+    dataset: CardiacNet
+    citation: yang2024cardiacnet
+    inputs: One A4C video per case
+    prediction_unit: video
+    table_name: Pulmonary arterial hypertension
+    positive: Source diagnosis
+    figure_name: Pulmonary arterial hypertension
+  rwma_public:
+    target: rwma
+    mode: classification
+    dataset: SegRWMA
+    citation: liu2023enhance
+    inputs: All 2D apical videos of one patient
+    prediction_unit: patient
+    table_name: Regional wall-motion abnormality
+    positive: Source label
+    figure_name: Regional wall-motion abnormality
+  stemi_hmc_qu_public:
+    target: rwma
+    mode: classification
+    dataset: HMC-QU
+    citation: degerli2023multiview
+    inputs: One apical video
+    prediction_unit: video
+    table_name: ST-elevation myocardial infarction
+    positive: Any segment labelled MI in the view
+    figure_name: Myocardial infarction
+  ejection_fraction_public:
+    target: ejection_fraction
+    mode: regression
+    dataset: EchoNet-Dynamic
+    citation: echonetdynamic2019
+    inputs: One A4C video
+    prediction_unit: video
+    table_name: Left ventricular ejection fraction
+    unit: percentage points
+  ejection_fraction_camus_public:
+    target: ejection_fraction
+    mode: regression
+    dataset: CAMUS
+    citation: leclerc2019deep
+    inputs: A2C and A4C videos of one patient
+    prediction_unit: patient
+    table_name: Left ventricular ejection fraction
+    unit: percentage points
+  ejection_fraction_pediatric_public:
+    target: ejection_fraction
+    mode: regression
+    dataset: EchoNet-Pediatric
+    citation: echonetpediatric2025
+    inputs: All A4C and PSAX videos of one examination
+    prediction_unit: examination (patient + accession)
+    table_name: Left ventricular ejection fraction
+    unit: percentage points
+  ivsd_lvh_public:
+    target: end_diastolic_interventricular_septal_thickness
+    mode: regression
+    dataset: EchoNet-LVH
+    citation: echonetlvh2020
+    inputs: One PLAX video
+    prediction_unit: video
+    table_name: End-diastolic interventricular septal thickness
+    unit: cm
+  lvidd_lvh_public:
+    target: lvedd
+    mode: regression
+    dataset: EchoNet-LVH
+    citation: echonetlvh2020
+    inputs: One PLAX video
+    prediction_unit: video
+    table_name: Left ventricular end-diastolic internal diameter
+    unit: cm
+  lvpwd_lvh_public:
+    target: end_diastolic_lv_posterior_wall_thickness
+    mode: regression
+    dataset: EchoNet-LVH
+    citation: echonetlvh2020
+    inputs: One PLAX video
+    prediction_unit: video
+    table_name: Left ventricular end-diastolic posterior wall thickness
+    unit: cm
